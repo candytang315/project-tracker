@@ -34,6 +34,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .btn-icon.del:hover  { color: #A32D2D; background: #FCEBEB; }
 .btn-icon.undo:hover { color: #854F0B; background: #FAEEDA; }
 .btn-icon.ok:hover   { color: #0F6E56; background: #E1F5EE; }
+.btn-icon.cal:hover  { color: #378ADD; background: #E6F1FB; }
 .btn-complete { font-size: 12px; padding: 5px 12px; border-radius: 6px; border: 1px solid #9FE1CB; background: #E1F5EE; color: #0F6E56; cursor: pointer; font-weight: 500; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
 .btn-complete:hover { background: #9FE1CB; }
 .card-edit { padding: 0 14px 14px; border-top: 1px solid #eee; }
@@ -294,10 +295,12 @@ function cardHtml(p){
       </div>
     </div>`:'';
 
+  const calBtn = (!p.done && p.date) ? `<button class="btn-icon cal" onclick="addToGoogleCalendar('${p._type}',${p.id})" title="加入 Google 行事曆">📅</button>` : '';
+
   const actions=p.done
     ?`<button class="btn-icon undo" onclick="undoDone('${p._type}',${p.id})" title="取消完成">↩</button>
       <button class="btn-icon del"  onclick="deleteItem('${p._type}',${p.id})" title="刪除">🗑</button>`
-    :`<button class="btn-complete" onclick="markDone('${p._type}',${p.id})">✓ 完成</button>
+    :`${calBtn}<button class="btn-complete" onclick="markDone('${p._type}',${p.id})">✓ 完成</button>
       <button class="btn-icon" onclick="editItem('${p._type}',${p.id})" title="編輯">✎</button>
       <button class="btn-icon del" onclick="deleteItem('${p._type}',${p.id})" title="刪除">🗑</button>`;
 
@@ -333,6 +336,16 @@ function cardHtml(p){
 }
 
 function getList(type){return type==='repair'?repairs:projects;}
+
+function addToGoogleCalendar(type,id){
+  const p=getList(type).find(p=>p.id===id);
+  if(!p||!p.date) return;
+  const dateCompact=p.date.replace(/-/g,'');
+  const title=encodeURIComponent(`【${type==='repair'?'維修':'專案'}】${p.name}`);
+  const details=encodeURIComponent(p.task||'');
+  const url=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateCompact}/${dateCompact}&details=${details}`;
+  window.open(url,'_blank');
+}
 
 function render(){
   const tag=t=>p=>({...p,_type:t});
