@@ -11,58 +11,58 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .layout { display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; align-items: start; }
 .left-col { min-width: 0; }
 @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
-.page-title { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
-.week-label { font-size: 13px; color: #666; margin-bottom: 1.5rem; }
-.sec-title { font-size: 13px; font-weight: 500; color: #555; margin-bottom: 10px; }
-.done-sec-title { font-size: 13px; font-weight: 500; color: #999; margin: 1.2rem 0 8px; }
+.page-title { font-size: 19px; font-weight: 500; margin-bottom: 4px; }
+.week-label { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+.sec-title { font-size: 14px; font-weight: 500; color: #555; margin-bottom: 10px; }
+.done-sec-title { font-size: 14px; font-weight: 500; color: #999; margin: 1.2rem 0 8px; }
 .project-card { background: #fff; border: 1px solid #e5e5e3; border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
 .project-card.is-done { opacity: 0.65; }
 .card-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; gap: 8px; }
 .card-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
 .card-left-text { min-width: 0; flex: 1; }
-.project-name { font-size: 14px; font-weight: 500; }
+.project-name { font-size: 15px; font-weight: 500; }
 .project-name.done-text { text-decoration: line-through; color: #aaa; }
-.project-meta { font-size: 12px; color: #888; margin-top: 2px; }
-.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+.project-meta { font-size: 13px; color: #888; margin-top: 2px; }
+.badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 6px; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
 .badge-high { background: #FCEBEB; color: #A32D2D; }
 .badge-mid  { background: #FAEEDA; color: #854F0B; }
 .badge-low  { background: #EAF3DE; color: #3B6D11; }
 .badge-done { background: #E1F5EE; color: #0F6E56; }
 .card-actions { display: flex; gap: 4px; flex-shrink: 0; align-items: center; }
-.btn-icon { background: none; border: none; cursor: pointer; padding: 5px 6px; border-radius: 6px; color: #888; font-size: 18px; display: inline-flex; align-items: center; }
+.btn-icon { background: none; border: none; cursor: pointer; padding: 5px 6px; border-radius: 6px; color: #888; font-size: 19px; display: inline-flex; align-items: center; }
 .btn-icon:hover { background: #f0f0ee; color: #333; }
 .btn-icon.del:hover  { color: #A32D2D; background: #FCEBEB; }
 .btn-icon.undo:hover { color: #854F0B; background: #FAEEDA; }
 .btn-icon.ok:hover   { color: #0F6E56; background: #E1F5EE; }
 .btn-icon.cal:hover  { color: #378ADD; background: #E6F1FB; }
-.btn-complete { font-size: 12px; padding: 5px 12px; border-radius: 6px; border: 1px solid #9FE1CB; background: #E1F5EE; color: #0F6E56; cursor: pointer; font-weight: 500; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+.btn-complete { font-size: 13px; padding: 5px 12px; border-radius: 6px; border: 1px solid #9FE1CB; background: #E1F5EE; color: #0F6E56; cursor: pointer; font-weight: 500; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
 .btn-complete:hover { background: #9FE1CB; }
 .card-edit { padding: 0 14px 14px; border-top: 1px solid #eee; }
 .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 12px; }
 .edit-grid .full { grid-column: 1 / -1; }
-.edit-label { font-size: 11px; color: #999; display: block; margin-bottom: 3px; }
-select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9px; border-radius: 6px; border: 1px solid #ddd; background: #fafafa; color: #1a1a1a; width: 100%; }
+.edit-label { font-size: 12px; color: #999; display: block; margin-bottom: 3px; }
+select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9px; border-radius: 6px; border: 1px solid #ddd; background: #fafafa; color: #1a1a1a; width: 100%; }
 .logs-area { border-top: 1px solid #eee; padding: 10px 14px 14px; background: #fafafa; }
-.logs-label { font-size: 11px; color: #999; margin-bottom: 8px; }
+.logs-label { font-size: 12px; color: #999; margin-bottom: 8px; }
 .log-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
-.log-date { font-size: 11px; color: #999; white-space: nowrap; padding-top: 3px; width: 40px; flex-shrink: 0; }
-.log-text { font-size: 13px; color: #333; line-height: 1.5; flex: 1; word-break: break-word; white-space: pre-wrap; }
-.log-del { background: none; border: none; cursor: pointer; color: #ccc; font-size: 16px; padding: 1px 3px; flex-shrink: 0; }
+.log-date { font-size: 13px; color: #999; white-space: nowrap; padding-top: 3px; width: 40px; flex-shrink: 0; }
+.log-text { font-size: 14px; color: #333; line-height: 1.5; flex: 1; word-break: break-word; white-space: pre-wrap; }
+.log-del { background: none; border: none; cursor: pointer; color: #ccc; font-size: 17px; padding: 1px 3px; flex-shrink: 0; }
 .log-del:hover { color: #A32D2D; }
 .add-log { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
 .add-log-row { display: flex; gap: 6px; align-items: center; }
-.add-log-row textarea { flex: 1; resize: vertical; font-family: inherit; line-height: 1.5; font-size: 13px; padding: 5px 9px; border-radius: 6px; border: 1px solid #ddd; background: #fafafa; color: #1a1a1a; }
-.btn-sm { font-size: 12px; padding: 5px 14px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #333; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.add-log-row textarea { flex: 1; resize: vertical; font-family: inherit; line-height: 1.5; font-size: 14px; padding: 5px 9px; border-radius: 6px; border: 1px solid #ddd; background: #fafafa; color: #1a1a1a; }
+.btn-sm { font-size: 13px; padding: 5px 14px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #333; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .btn-sm:hover { background: #f0f0ee; }
 .add-card { border: 1px dashed #ccc; border-radius: 12px; padding: 14px; margin-bottom: 10px; background: #fff; }
 .add-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .add-grid .full { grid-column: 1 / -1; text-align: right; }
 .divider { border: none; border-top: 1px solid #e5e5e3; margin: 1.5rem 0; }
-.btn-export { font-size: 13px; padding: 8px 18px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #333; cursor: pointer; }
+.btn-export { font-size: 14px; padding: 8px 18px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #333; cursor: pointer; }
 .btn-export:hover { background: #f0f0ee; }
-.copied { font-size: 12px; color: #0F6E56; margin-left: 10px; display: none; }
-.export-box { margin-top: 1rem; background: #fafafa; border: 1px solid #e5e5e3; border-radius: 8px; padding: 1rem; font-size: 13px; white-space: pre-wrap; line-height: 1.7; display: none; }
-.sync-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; padding: 10px 14px; background: #fff; border: 1px solid #e5e5e3; border-radius: 10px; font-size: 12px; color: #888; }
+.copied { font-size: 13px; color: #0F6E56; margin-left: 10px; display: none; }
+.export-box { margin-top: 1rem; background: #fafafa; border: 1px solid #e5e5e3; border-radius: 8px; padding: 1rem; font-size: 14px; white-space: pre-wrap; line-height: 1.7; display: none; }
+.sync-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; padding: 10px 14px; background: #fff; border: 1px solid #e5e5e3; border-radius: 10px; font-size: 13px; color: #888; }
 .sync-bar .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
 .sync-bar .status-dot.ok { background: #3B6D11; }
 .sync-bar .status-dot.err { background: #A32D2D; }
@@ -71,17 +71,17 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
 .sync-bar .spacer { flex: 1; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
 .modal-box { background: #fff; border-radius: 12px; padding: 1.5rem; max-width: 360px; width: 90%; }
-.modal-box h3 { font-size: 15px; margin-bottom: 10px; }
-.modal-box p { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.6; }
+.modal-box h3 { font-size: 16px; margin-bottom: 10px; }
+.modal-box p { font-size: 14px; color: #666; margin-bottom: 12px; line-height: 1.6; }
 .modal-box input { margin-bottom: 10px; }
 
 .cal-card { background: #fff; border: 1px solid #e5e5e3; border-radius: 12px; padding: 1rem; margin-bottom: 10px; }
 .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.cal-header button { background: none; border: none; cursor: pointer; font-size: 16px; color: #888; padding: 2px 6px; }
+.cal-header button { background: none; border: none; cursor: pointer; font-size: 17px; color: #888; padding: 2px 6px; }
 .cal-header button:hover { color: #333; }
-.cal-title { font-weight: 500; font-size: 14px; }
-.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; font-size: 12px; text-align: center; }
-.cal-grid .dow { font-size: 11px; color: #999; padding-bottom: 4px; }
+.cal-title { font-weight: 500; font-size: 15px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; font-size: 13px; text-align: center; }
+.cal-grid .dow { font-size: 12px; color: #999; padding-bottom: 4px; }
 .cal-day { padding: 6px 0; border-radius: 6px; position: relative; cursor: default; }
 .cal-day.has-event { cursor: pointer; }
 .cal-day.has-event:hover { background: #f0f0ee; }
@@ -89,24 +89,24 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
 .cal-day.other-month { color: #ccc; }
 .cal-day.today { border: 1.5px solid #378ADD; font-weight: 500; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; margin: 2px auto 0; }
-.cal-legend { margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee; font-size: 11px; color: #888; line-height: 1.8; }
+.cal-legend { margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee; font-size: 12px; color: #888; line-height: 1.8; }
 .cal-legend .leg-row { display: flex; align-items: center; gap: 6px; }
 .cal-legend .leg-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-.today-card-title { font-weight: 500; font-size: 13px; margin-bottom: 10px; }
+.today-card-title { font-weight: 500; font-size: 14px; margin-bottom: 10px; }
 .today-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0ee; }
 .today-item:last-child { border-bottom: none; }
 .today-item .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-.today-item .ti-name { font-size: 13px; margin: 0; font-weight: 500; }
-.today-item .ti-sub { font-size: 12px; color: #888; margin: 2px 0 0; }
-.today-empty { font-size: 13px; color: #bbb; }
+.today-item .ti-name { font-size: 14px; margin: 0; font-weight: 500; }
+.today-item .ti-sub { font-size: 13px; color: #888; margin: 2px 0 0; }
+.today-empty { font-size: 14px; color: #bbb; }
 
 .reminders-area { border-top: 1px solid #eee; padding: 10px 14px 14px; background: #fafafa; }
-.reminders-label { font-size: 11px; color: #999; margin-bottom: 8px; }
+.reminders-label { font-size: 12px; color: #999; margin-bottom: 8px; }
 .rem-row { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #eee; }
 .rem-row:last-of-type { border-bottom: none; }
-.rem-date { font-size: 12px; color: #378ADD; font-weight: 500; white-space: nowrap; width: 42px; padding-top: 2px; }
-.rem-text { font-size: 13px; flex: 1; line-height: 1.5; word-break: break-word; }
-.rem-icon { background: none; border: none; cursor: pointer; color: #bbb; font-size: 15px; padding: 2px 3px; flex-shrink: 0; }
+.rem-date { font-size: 13px; color: #378ADD; font-weight: 500; white-space: nowrap; width: 42px; padding-top: 2px; }
+.rem-text { font-size: 14px; flex: 1; line-height: 1.5; word-break: break-word; }
+.rem-icon { background: none; border: none; cursor: pointer; color: #bbb; font-size: 16px; padding: 2px 3px; flex-shrink: 0; }
 .rem-icon:hover { color: #555; }
 .rem-icon.del:hover { color: #A32D2D; }
 .rem-icon.cal:hover { color: #378ADD; }
@@ -152,7 +152,7 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
     <div class="add-grid">
       <div><label class="edit-label">專案名稱</label><input type="text" id="an" placeholder="例：忠孝SOGO" /></div>
       <div><label class="edit-label">指派日期</label><input type="date" id="aa" /></div>
-      <div><label class="edit-label">專案說明／備註</label><textarea id="at" placeholder="例：局部修改後送百貨圖審" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
+      <div><label class="edit-label">專案說明／備註</label><textarea id="at" placeholder="例：局部修改後送百貨圖審" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
       <div><label class="edit-label">預計完成日期</label><input type="date" id="ad" /></div>
       <div><label class="edit-label">優先順序</label>
         <select id="ap"><option value="high">🔴 高</option><option value="mid" selected>🟡 中</option><option value="low">🟢 低</option></select>
@@ -174,7 +174,7 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
     <div class="add-grid">
       <div><label class="edit-label">工程名稱</label><input type="text" id="rn" placeholder="例：漢神巨蛋燈具維修" /></div>
       <div><label class="edit-label">指派日期</label><input type="date" id="ra" /></div>
-      <div><label class="edit-label">工程內容／備註</label><textarea id="rt" placeholder="例：燈具損壞需更換" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
+      <div><label class="edit-label">工程內容／備註</label><textarea id="rt" placeholder="例：燈具損壞需更換" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
       <div><label class="edit-label">預計完成日期</label><input type="date" id="rd" /></div>
       <div><label class="edit-label">優先順序</label>
         <select id="rp"><option value="high">🔴 高</option><option value="mid" selected>🟡 中</option><option value="low">🟢 低</option></select>
@@ -272,10 +272,10 @@ function cardHtml(p){
         return `
       <div class="log-row" style="background:#f0f4ff;padding:6px;border-radius:6px;">
         <input type="date" id="le-date-${p.id}-${li}" value="${l.date}" style="width:120px;flex-shrink:0;" />
-        <textarea id="le-note-${p.id}-${li}" rows="2" style="flex:1;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fff;">${l.note}</textarea>
+        <textarea id="le-note-${p.id}-${li}" rows="2" style="flex:1;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fff;">${l.note}</textarea>
         <div style="display:flex;flex-direction:column;gap:2px;">
-          <button class="btn-icon ok" onclick="saveLog('${p._type}',${p.id},${li})" title="儲存" style="padding:2px 4px;font-size:15px;">✓</button>
-          <button class="btn-icon" onclick="cancelLogEdit('${p._type}',${p.id},${li})" title="取消" style="padding:2px 4px;font-size:15px;">✕</button>
+          <button class="btn-icon ok" onclick="saveLog('${p._type}',${p.id},${li})" title="儲存" style="padding:2px 4px;font-size:16px;">✓</button>
+          <button class="btn-icon" onclick="cancelLogEdit('${p._type}',${p.id},${li})" title="取消" style="padding:2px 4px;font-size:16px;">✕</button>
         </div>
       </div>`;
       }
@@ -294,7 +294,7 @@ function cardHtml(p){
       <div class="edit-grid">
         <div><label class="edit-label">名稱</label><input type="text" id="en-${p.id}" value="${p.name}" /></div>
         <div><label class="edit-label">指派日期</label><input type="date" id="ea-${p.id}" value="${p.arrived||''}" /></div>
-        <div class="full"><label class="edit-label">說明／備註</label><textarea id="et-${p.id}" rows="3" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;">${p.task}</textarea></div>
+        <div class="full"><label class="edit-label">說明／備註</label><textarea id="et-${p.id}" rows="3" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;">${p.task}</textarea></div>
         <div><label class="edit-label">預計完成日期</label><input type="date" id="ed-${p.id}" value="${p.date}" /></div>
         <div><label class="edit-label">優先順序</label>
           <select id="ep-${p.id}">
@@ -326,8 +326,8 @@ function cardHtml(p){
         <input type="date" id="re-date-${p.id}-${ri}" value="${r.date}" style="width:120px;flex-shrink:0;" />
         <input type="text" id="re-note-${p.id}-${ri}" value="${r.note}" style="flex:1;" />
         <div style="display:flex;flex-direction:column;gap:2px;">
-          <button class="btn-icon ok" onclick="saveReminder('${p._type}',${p.id},${ri})" title="儲存" style="padding:2px 4px;font-size:15px;">✓</button>
-          <button class="btn-icon" onclick="cancelReminderEdit('${p._type}',${p.id},${ri})" title="取消" style="padding:2px 4px;font-size:15px;">✕</button>
+          <button class="btn-icon ok" onclick="saveReminder('${p._type}',${p.id},${ri})" title="儲存" style="padding:2px 4px;font-size:16px;">✓</button>
+          <button class="btn-icon" onclick="cancelReminderEdit('${p._type}',${p.id},${ri})" title="取消" style="padding:2px 4px;font-size:16px;">✕</button>
         </div>
       </div>`;
     }
