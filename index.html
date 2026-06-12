@@ -131,6 +131,12 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 .nav-sub-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .card-highlight { animation: cardFlash 1.4s ease; }
 @keyframes cardFlash { 0%,100% { box-shadow: none; } 30% { box-shadow: 0 0 0 3px #B7D8F2; } }
+
+.history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
+.history-item .h-time { color: #555; }
+.history-item .h-restore { font-size: 12px; padding: 4px 10px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
+.history-item .h-restore:hover { background: #f0f0ee; }
+.history-loading { font-size: 13px; color: #999; padding: 12px 0; text-align: center; }
 </style>
 </head>
 <body>
@@ -180,7 +186,17 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
     <span id="status-text">準備中…</span>
     <span class="spacer"></span>
     <button class="btn-sm" onclick="manualSync()">🔄 同步</button>
+    <button class="btn-sm" onclick="showHistoryModal()">↩ 還原</button>
     <button class="btn-sm" onclick="showTokenModal()">⚙️</button>
+  </div>
+
+  <div id="history-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-box" style="max-width:420px;">
+      <h3>↩ 還原歷史版本</h3>
+      <p>選擇一個時間點，會把資料還原成當時的內容（目前內容會被覆蓋）。</p>
+      <div id="history-list" style="max-height:280px;overflow-y:auto;margin-bottom:12px;"></div>
+      <button class="btn-sm" onclick="hideHistoryModal()" style="width:100%;">取消</button>
+    </div>
   </div>
 
   <div class="tab-section active" id="tab-project">
@@ -878,6 +894,65 @@ async function saveToGitHub(){
 }
 
 function manualSync(){ loadFromGitHub(); }
+
+function showHistoryModal(){
+  document.getElementById('history-modal').style.display='flex';
+  loadHistory();
+}
+function hideHistoryModal(){
+  document.getElementById('history-modal').style.display='none';
+}
+
+async function loadHistory(){
+  const listEl=document.getElementById('history-list');
+  listEl.innerHTML='<div class="history-loading">讀取歷史紀錄中…</div>';
+  const token=getToken();
+  try{
+    const res=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/commits?path=${GH_PATH}&per_page=15`,{
+      headers:{'Authorization':'token '+token,'Accept':'application/vnd.github+json'}
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const commits=await res.json();
+    if(!commits.length){
+      listEl.innerHTML='<div class="history-loading">沒有歷史紀錄</div>';
+      return;
+    }
+    listEl.innerHTML=commits.map((c,i)=>{
+      const d=new Date(c.commit.author.date);
+      const timeStr=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+      const label = i===0 ? '（目前版本）' : '';
+      return `
+        <div class="history-item">
+          <span class="h-time">${timeStr} ${label}</span>
+          ${i===0 ? '' : `<button class="h-restore" onclick="restoreVersion('${c.sha}')">還原這個版本</button>`}
+        </div>`;
+    }).join('');
+  }catch(e){
+    listEl.innerHTML='<div class="history-loading">讀取失敗：'+e.message+'</div>';
+  }
+}
+
+async function restoreVersion(commitSha){
+  if(!confirm('確定要還原到這個版本嗎？目前的內容會被覆蓋（但仍會留在歷史紀錄裡）。')) return;
+  const token=getToken();
+  try{
+    const res=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}?ref=${commitSha}`,{
+      headers:{'Authorization':'token '+token,'Accept':'application/vnd.github+json'}
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    const content=JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    projects=(content.projects||[]).map(p=>({...p,editing:false}));
+    repairs=(content.repairs||[]).map(p=>({...p,editing:false}));
+    nextId=content.nextId||1;
+    render();
+    renderCalendar();
+    hideHistoryModal();
+    await saveToGitHub();
+  }catch(e){
+    alert('還原失敗：'+e.message);
+  }
+}
 
 // ===== Init =====
 getWeekRange();
