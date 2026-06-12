@@ -195,12 +195,26 @@ function fmtDate(s){if(!s)return'';const[,m,d]=s.split('-');return`${parseInt(m)
 
 function cardHtml(p){
   const logsHtml=p.logs.length
-    ?p.logs.map((l,li)=>`
+    ?p.logs.map((l,li)=>{
+      if(l.editing){
+        return `
+      <div class="log-row" style="background:#f0f4ff;padding:6px;border-radius:6px;">
+        <input type="date" id="le-date-${p.id}-${li}" value="${l.date}" style="width:120px;flex-shrink:0;" />
+        <textarea id="le-note-${p.id}-${li}" rows="2" style="flex:1;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fff;">${l.note}</textarea>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <button class="btn-icon ok" onclick="saveLog('${p._type}',${p.id},${li})" title="儲存" style="padding:2px 4px;font-size:15px;">✓</button>
+          <button class="btn-icon" onclick="cancelLogEdit('${p._type}',${p.id},${li})" title="取消" style="padding:2px 4px;font-size:15px;">✕</button>
+        </div>
+      </div>`;
+      }
+      return `
       <div class="log-row">
         <span class="log-date">${fmtDate(l.date)||'—'}</span>
         <span class="log-text">${l.note}</span>
-        <button class="log-del" onclick="deleteLog('${p._type}',${p.id},${li})">✕</button>
-      </div>`).join('')
+        <button class="log-del" onclick="editLog('${p._type}',${p.id},${li})" title="編輯" style="color:#aaa;">✎</button>
+        <button class="log-del" onclick="deleteLog('${p._type}',${p.id},${li})" title="刪除">✕</button>
+      </div>`;
+    }).join('')
     :`<div style="font-size:13px;color:#bbb;margin-bottom:6px;">尚無進度記錄</div>`;
 
   const editHtml=p.editing?`
@@ -316,6 +330,24 @@ function addLog(type,id){
 }
 
 function deleteLog(type,id,li){getList(type).find(p=>p.id===id).logs.splice(li,1);rerender();}
+
+function editLog(type,id,li){
+  getList(type).find(p=>p.id===id).logs[li].editing=true;
+  render();
+}
+
+function cancelLogEdit(type,id,li){
+  getList(type).find(p=>p.id===id).logs[li].editing=false;
+  render();
+}
+
+function saveLog(type,id,li){
+  const p=getList(type).find(p=>p.id===id);
+  p.logs[li].date=document.getElementById(`le-date-${id}-${li}`).value;
+  p.logs[li].note=document.getElementById(`le-note-${id}-${li}`).value.trim();
+  p.logs[li].editing=false;
+  rerender();
+}
 
 function addItem(type){
   if(type==='repair'){
