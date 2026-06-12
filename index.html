@@ -121,6 +121,13 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 .add-rem { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
 .add-rem input[type="date"] { width: 120px; flex-shrink: 0; }
 .add-rem input[type="text"] { flex: 1; }
+
+.nav-sub-wrap { margin: 4px 0 8px 8px; padding-left: 10px; border-left: 2px solid #E6F1FB; }
+.nav-sub-item { padding: 6px 10px; border-radius: 6px; font-size: 13px; color: #888; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-sub-item:hover { background: #f5f5f3; color: #333; }
+.nav-sub-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.card-highlight { animation: cardFlash 1.4s ease; }
+@keyframes cardFlash { 0%,100% { box-shadow: none; } 30% { box-shadow: 0 0 0 3px #B7D8F2; } }
 </style>
 </head>
 <body>
@@ -145,14 +152,19 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
     <i class="ti ti-folder" aria-hidden="true"></i>進行中的專案
     <span class="nav-count" id="nav-count-project">0</span>
   </div>
+  <div class="nav-sub-wrap" id="nav-sub-project"></div>
+
   <div class="nav-item" data-tab="tab-repair" onclick="switchTab('tab-repair')">
     <i class="ti ti-tool" aria-hidden="true"></i>維修及零星工程
     <span class="nav-count" id="nav-count-repair">0</span>
   </div>
+  <div class="nav-sub-wrap" id="nav-sub-repair"></div>
+
   <div class="nav-item" data-tab="tab-done" onclick="switchTab('tab-done')">
     <i class="ti ti-check" aria-hidden="true"></i>已完成
     <span class="nav-count" id="nav-count-done">0</span>
   </div>
+  <div class="nav-sub-wrap" id="nav-sub-done"></div>
 </div>
 
 <div class="left-col">
@@ -391,7 +403,7 @@ function cardHtml(p){
     </div>`;
 
   return`
-  <div class="project-card ${p.done?'is-done':''}">
+  <div class="project-card ${p.done?'is-done':''}" id="card-${p._type}-${p.id}">
     <div class="card-header">
       <div class="card-left">
         <div class="card-left-text">
@@ -438,6 +450,43 @@ function render(){
   document.getElementById('nav-count-project').textContent=pa.length;
   document.getElementById('nav-count-repair').textContent=ra.length;
   document.getElementById('nav-count-done').textContent=doneAll.length;
+
+  renderSubNav('nav-sub-project', pa);
+  renderSubNav('nav-sub-repair', ra);
+  renderSubNav('nav-sub-done', doneAll);
+}
+
+function priorityDotColor(p){
+  if(p.done) return '#0F6E56';
+  return priorityColor(p.priority);
+}
+
+function renderSubNav(containerId, items){
+  const el=document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML=items.map(p=>`
+    <div class="nav-sub-item" onclick="jumpToCard('${p._type}',${p.id})" title="${p.name}">
+      <span class="nav-sub-dot" style="background:${priorityDotColor(p)};"></span>${p.name}
+    </div>`).join('');
+}
+
+function jumpToCard(type,id){
+  const tabMap={project:'tab-project',repair:'tab-repair'};
+  const card=document.getElementById(`card-${type}-${id}`);
+  if(!card) return;
+
+  // 若卡片在「已完成」清單裡，需切到已完成分頁
+  const isDone=getList(type).find(p=>p.id===id)?.done;
+  switchTab(isDone?'tab-done':tabMap[type]);
+
+  setTimeout(()=>{
+    const target=document.getElementById(`card-${type}-${id}`);
+    if(!target) return;
+    target.scrollIntoView({behavior:'smooth', block:'center'});
+    target.classList.remove('card-highlight');
+    void target.offsetWidth;
+    target.classList.add('card-highlight');
+  }, 50);
 }
 
 function switchTab(tabId){
