@@ -82,6 +82,9 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
 .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; font-size: 12px; text-align: center; }
 .cal-grid .dow { font-size: 11px; color: #999; padding-bottom: 4px; }
 .cal-day { padding: 6px 0; border-radius: 6px; position: relative; cursor: default; }
+.cal-day.has-event { cursor: pointer; }
+.cal-day.has-event:hover { background: #f0f0ee; }
+.cal-day.selected { background: #E6F1FB; }
 .cal-day.other-month { color: #ccc; }
 .cal-day.today { border: 1.5px solid #378ADD; font-weight: 500; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; margin: 2px auto 0; }
@@ -352,11 +355,12 @@ function scheduleSave(){
 
 function rerender(){ render(); renderCalendar(); scheduleSave(); }
 
-let calViewYear, calViewMonth;
+let calViewYear, calViewMonth, selectedDate;
 (function(){
   const now=new Date();
   calViewYear=now.getFullYear();
   calViewMonth=now.getMonth();
+  selectedDate=todayStr();
 })();
 
 function priorityColor(p){
@@ -421,7 +425,13 @@ function renderCalendar(){
     if(eventsByDate[dateKey]){
       dotsHtml=eventsByDate[dateKey].map(e=>`<div class="cal-dot" style="background:${e.color};"></div>`).join('');
     }
-    html+=`<div class="cal-day ${isToday?'today':''}">${d}${dotsHtml}</div>`;
+    const hasEvent=!!eventsByDate[dateKey];
+    const isSelected=dateKey===selectedDate;
+    const classes=['cal-day'];
+    if(isToday) classes.push('today');
+    if(hasEvent) classes.push('has-event');
+    if(isSelected) classes.push('selected');
+    html+=`<div class="${classes.join(' ')}" onclick="selectCalDate('${dateKey}')">${d}${dotsHtml}</div>`;
   }
 
   const totalCells=startWeekday+daysInMonth;
@@ -431,37 +441,43 @@ function renderCalendar(){
   }
 
   gridEl.innerHTML=html;
-  renderTodayList();
+  renderDayList();
 }
 
-function renderTodayList(){
+function selectCalDate(dateKey){
+  selectedDate=dateKey;
+  renderCalendar();
+}
+
+function renderDayList(){
   const titleEl=document.getElementById('today-title');
   const listEl=document.getElementById('today-list');
   if(!titleEl||!listEl) return;
 
-  const now=new Date();
-  titleEl.textContent=`${now.getMonth()+1}月${now.getDate()}日 今日行程`;
+  const t=selectedDate;
+  const isToday=t===todayStr();
+  const [y,m,d]=t.split('-').map(Number);
+  titleEl.textContent=isToday?`${m}月${d}日 今日行程`:`${m}月${d}日 行程`;
 
-  const t=todayStr();
   const items=collectAllItems().filter(p=>!p.done);
-  const todayItems=[];
+  const dayItems=[];
 
   items.forEach(p=>{
     if(p.arrived===t){
-      todayItems.push({name:p.name,sub:'指派日期到了',color:'#378ADD'});
+      dayItems.push({name:p.name,sub:'指派日期',color:'#378ADD'});
     }
     if(p.date===t){
       const labelMap={high:'高優先',mid:'中優先',low:'低優先'};
-      todayItems.push({name:p.name,sub:`預計完成日期到了 · ${labelMap[p.priority]||''}`,color:priorityColor(p.priority)});
+      dayItems.push({name:p.name,sub:`預計完成日期 · ${labelMap[p.priority]||''}`,color:priorityColor(p.priority)});
     }
   });
 
-  if(!todayItems.length){
-    listEl.innerHTML='<div class="today-empty">今天沒有指派或預計完成的項目</div>';
+  if(!dayItems.length){
+    listEl.innerHTML=`<div class="today-empty">${isToday?'今天':'這天'}沒有指派或預計完成的項目</div>`;
     return;
   }
 
-  listEl.innerHTML=todayItems.map(it=>`
+  listEl.innerHTML=dayItems.map(it=>`
     <div class="today-item">
       <span class="dot" style="background:${it.color};"></span>
       <div>
