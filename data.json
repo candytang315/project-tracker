@@ -1,0 +1,39 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "忠孝SOGO",
+      "arrived": "",
+      "task": "局部修改設計圖 → 圖審送件",
+      "date": "",
+      "priority": "high",
+      "done": false,
+      "editing": false,
+      "logs": []
+    },
+    {
+      "id": 2,
+      "name": "漢神巨蛋",
+      "arrived": "",
+      "task": "三方案設計圖面",
+      "date": "",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
+    },
+    {
+      "id": 3,
+      "name": "台北辦公室",
+      "arrived": "",
+      "task": "會議室修改",
+      "date": "",
+      "priority": "low",
+      "done": false,
+      "editing": false,
+      "logs": []
+    }
+  ],
+  "repairs": [],
+  "nextId": 10
+}
