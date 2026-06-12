@@ -106,7 +106,7 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
     <div class="add-grid">
       <div><label class="edit-label">專案名稱</label><input type="text" id="an" placeholder="例：忠孝SOGO" /></div>
       <div><label class="edit-label">指派日期</label><input type="date" id="aa" /></div>
-      <div><label class="edit-label">專案說明／備註</label><input type="text" id="at" placeholder="例：局部修改後送百貨圖審" /></div>
+      <div><label class="edit-label">專案說明／備註</label><textarea id="at" placeholder="例：局部修改後送百貨圖審" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
       <div><label class="edit-label">預計完成日期</label><input type="date" id="ad" /></div>
       <div><label class="edit-label">優先順序</label>
         <select id="ap"><option value="high">🔴 高</option><option value="mid" selected>🟡 中</option><option value="low">🟢 低</option></select>
@@ -128,7 +128,7 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
     <div class="add-grid">
       <div><label class="edit-label">工程名稱</label><input type="text" id="rn" placeholder="例：漢神巨蛋燈具維修" /></div>
       <div><label class="edit-label">指派日期</label><input type="date" id="ra" /></div>
-      <div><label class="edit-label">工程內容／備註</label><input type="text" id="rt" placeholder="例：燈具損壞需更換" /></div>
+      <div><label class="edit-label">工程內容／備註</label><textarea id="rt" placeholder="例：燈具損壞需更換" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
       <div><label class="edit-label">預計完成日期</label><input type="date" id="rd" /></div>
       <div><label class="edit-label">優先順序</label>
         <select id="rp"><option value="high">🔴 高</option><option value="mid" selected>🟡 中</option><option value="low">🟢 低</option></select>
@@ -222,7 +222,7 @@ function cardHtml(p){
       <div class="edit-grid">
         <div><label class="edit-label">名稱</label><input type="text" id="en-${p.id}" value="${p.name}" /></div>
         <div><label class="edit-label">指派日期</label><input type="date" id="ea-${p.id}" value="${p.arrived||''}" /></div>
-        <div><label class="edit-label">說明／備註</label><input type="text" id="et-${p.id}" value="${p.task}" /></div>
+        <div class="full"><label class="edit-label">說明／備註</label><textarea id="et-${p.id}" rows="3" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:13px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;">${p.task}</textarea></div>
         <div><label class="edit-label">預計完成日期</label><input type="date" id="ed-${p.id}" value="${p.date}" /></div>
         <div><label class="edit-label">優先順序</label>
           <select id="ep-${p.id}">
@@ -265,7 +265,7 @@ function cardHtml(p){
         <div class="card-left-text">
           <div class="project-name ${p.done?'done-text':''}">${p.name}</div>
           ${(p.arrived||p.date)?`<div class="project-meta" style="color:#aaa;">${p.arrived?'指派日期：'+fmtDate(p.arrived):''}${p.arrived&&p.date?' ． ':''}${p.date?'預計完成日期：'+fmtDate(p.date):''}</div>`:''}
-          ${p.task?`<div class="project-meta">專案說明：${p.task}</div>`:''}
+          ${p.task?`<div class="project-meta" style="white-space:pre-wrap;">專案說明：${p.task}</div>`:''}
         </div>
         ${badgeHtml(p)}
       </div>
