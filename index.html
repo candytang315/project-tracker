@@ -99,6 +99,20 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
 .today-item .ti-name { font-size: 13px; margin: 0; font-weight: 500; }
 .today-item .ti-sub { font-size: 12px; color: #888; margin: 2px 0 0; }
 .today-empty { font-size: 13px; color: #bbb; }
+
+.reminders-area { border-top: 1px solid #eee; padding: 10px 14px 14px; background: #fafafa; }
+.reminders-label { font-size: 11px; color: #999; margin-bottom: 8px; }
+.rem-row { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #eee; }
+.rem-row:last-of-type { border-bottom: none; }
+.rem-date { font-size: 12px; color: #378ADD; font-weight: 500; white-space: nowrap; width: 42px; padding-top: 2px; }
+.rem-text { font-size: 13px; flex: 1; line-height: 1.5; word-break: break-word; }
+.rem-icon { background: none; border: none; cursor: pointer; color: #bbb; font-size: 15px; padding: 2px 3px; flex-shrink: 0; }
+.rem-icon:hover { color: #555; }
+.rem-icon.del:hover { color: #A32D2D; }
+.rem-icon.cal:hover { color: #378ADD; }
+.add-rem { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+.add-rem input[type="date"] { width: 120px; flex-shrink: 0; }
+.add-rem input[type="text"] { flex: 1; }
 </style>
 </head>
 <body>
@@ -189,6 +203,7 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
       <div class="leg-row"><span class="leg-dot" style="background:#A32D2D;"></span>預計完成（高）</div>
       <div class="leg-row"><span class="leg-dot" style="background:#854F0B;"></span>預計完成（中）</div>
       <div class="leg-row"><span class="leg-dot" style="background:#3B6D11;"></span>預計完成（低）</div>
+      <div class="leg-row"><span class="leg-dot" style="background:#534AB7;"></span>待辦日期</div>
     </div>
   </div>
   <div class="cal-card">
@@ -304,6 +319,39 @@ function cardHtml(p){
       <button class="btn-icon" onclick="editItem('${p._type}',${p.id})" title="編輯">✎</button>
       <button class="btn-icon del" onclick="deleteItem('${p._type}',${p.id})" title="刪除">🗑</button>`;
 
+  const remindersHtml=(p.reminders||[]).map((r,ri)=>{
+    if(r.editing){
+      return `
+      <div class="rem-row" style="background:#f0f4ff;padding:6px;border-radius:6px;">
+        <input type="date" id="re-date-${p.id}-${ri}" value="${r.date}" style="width:120px;flex-shrink:0;" />
+        <input type="text" id="re-note-${p.id}-${ri}" value="${r.note}" style="flex:1;" />
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <button class="btn-icon ok" onclick="saveReminder('${p._type}',${p.id},${ri})" title="儲存" style="padding:2px 4px;font-size:15px;">✓</button>
+          <button class="btn-icon" onclick="cancelReminderEdit('${p._type}',${p.id},${ri})" title="取消" style="padding:2px 4px;font-size:15px;">✕</button>
+        </div>
+      </div>`;
+    }
+    return `
+      <div class="rem-row">
+        <span class="rem-date">${fmtDate(r.date)||'—'}</span>
+        <span class="rem-text">${r.note}</span>
+        <button class="rem-icon cal" onclick="addReminderToGoogleCalendar('${p._type}',${p.id},${ri})" title="加入 Google 行事曆">📅</button>
+        <button class="rem-icon" onclick="editReminder('${p._type}',${p.id},${ri})" title="編輯">✎</button>
+        <button class="rem-icon del" onclick="deleteReminder('${p._type}',${p.id},${ri})" title="刪除">✕</button>
+      </div>`;
+  }).join('');
+
+  const remindersSection=p.done?'':`
+    <div class="reminders-area">
+      <div class="reminders-label">待辦日期</div>
+      ${remindersHtml}
+      <div class="add-rem">
+        <input type="date" id="rmd-${p.id}" value="${todayStr()}" />
+        <input type="text" id="rmn-${p.id}" placeholder="輸入待辦內容…" />
+        <button class="btn-sm" onclick="addReminder('${p._type}',${p.id})">新增</button>
+      </div>
+    </div>`;
+
   const logsSection=p.done?'':`
     <div class="logs-area">
       <div class="logs-label">進度記錄</div>
@@ -331,6 +379,7 @@ function cardHtml(p){
       <div class="card-actions">${actions}</div>
     </div>
     ${editHtml}
+    ${remindersSection}
     ${logsSection}
   </div>`;
 }
@@ -415,6 +464,11 @@ function renderCalendar(){
     if(p.date){
       (eventsByDate[p.date]=eventsByDate[p.date]||[]).push({type:'due',color:priorityColor(p.priority)});
     }
+    (p.reminders||[]).forEach(r=>{
+      if(r.date){
+        (eventsByDate[r.date]=eventsByDate[r.date]||[]).push({type:'reminder',color:'#534AB7'});
+      }
+    });
   });
 
   const firstDay=new Date(calViewYear,calViewMonth,1);
@@ -483,6 +537,11 @@ function renderDayList(){
       const labelMap={high:'高優先',mid:'中優先',low:'低優先'};
       dayItems.push({name:p.name,sub:`預計完成日期 · ${labelMap[p.priority]||''}`,color:priorityColor(p.priority)});
     }
+    (p.reminders||[]).forEach(r=>{
+      if(r.date===t){
+        dayItems.push({name:p.name,sub:r.note,color:'#534AB7'});
+      }
+    });
   });
 
   if(!dayItems.length){
@@ -532,6 +591,51 @@ function addLog(type,id){
 
 function deleteLog(type,id,li){getList(type).find(p=>p.id===id).logs.splice(li,1);rerender();}
 
+function addReminder(type,id){
+  const p=getList(type).find(p=>p.id===id);
+  const date=document.getElementById(`rmd-${id}`).value;
+  const note=document.getElementById(`rmn-${id}`).value.trim();
+  if(!note)return;
+  if(!p.reminders) p.reminders=[];
+  p.reminders.push({date,note});
+  rerender();
+}
+
+function editReminder(type,id,ri){
+  const p=getList(type).find(p=>p.id===id);
+  p.reminders[ri].editing=true;
+  render();
+}
+
+function cancelReminderEdit(type,id,ri){
+  const p=getList(type).find(p=>p.id===id);
+  p.reminders[ri].editing=false;
+  render();
+}
+
+function saveReminder(type,id,ri){
+  const p=getList(type).find(p=>p.id===id);
+  p.reminders[ri].date=document.getElementById(`re-date-${id}-${ri}`).value;
+  p.reminders[ri].note=document.getElementById(`re-note-${id}-${ri}`).value.trim();
+  p.reminders[ri].editing=false;
+  rerender();
+}
+
+function deleteReminder(type,id,ri){
+  getList(type).find(p=>p.id===id).reminders.splice(ri,1);
+  rerender();
+}
+
+function addReminderToGoogleCalendar(type,id,ri){
+  const p=getList(type).find(p=>p.id===id);
+  const r=p.reminders[ri];
+  if(!r||!r.date) return;
+  const dateCompact=r.date.replace(/-/g,'');
+  const title=encodeURIComponent(`【${p.name}】${r.note}`);
+  const url=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateCompact}/${dateCompact}`;
+  window.open(url,'_blank');
+}
+
 function editLog(type,id,li){
   getList(type).find(p=>p.id===id).logs[li].editing=true;
   render();
@@ -576,6 +680,7 @@ function exportReport(){
     text+=`【進行中的專案】\n`;
     active.forEach(p=>{
       text+=`- ${p.name}${p.arrived?'（指派 '+fmtDate(p.arrived)+'）':''}｜${p.task}${p.date?'（預計完成 '+fmtDate(p.date)+'）':''}\n`;
+      (p.reminders||[]).forEach(r=>text+=`  待辦 ${fmtDate(r.date)||'　'}　${r.note}\n`);
       p.logs.slice(-3).forEach(l=>text+=`  ${fmtDate(l.date)||'　'}　${l.note}\n`);
     });
   }
@@ -589,6 +694,7 @@ function exportReport(){
     text+=`\n【維修及零星工程 - 進行中】\n`;
     ra.forEach(p=>{
       text+=`- ${p.name}${p.arrived?'（指派 '+fmtDate(p.arrived)+'）':''}｜${p.task}${p.date?'（預計完成 '+fmtDate(p.date)+'）':''}\n`;
+      (p.reminders||[]).forEach(r=>text+=`  待辦 ${fmtDate(r.date)||'　'}　${r.note}\n`);
       p.logs.slice(-3).forEach(l=>text+=`  ${fmtDate(l.date)||'　'}　${l.note}\n`);
     });
   }
