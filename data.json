@@ -41,7 +41,7 @@
       "date": "2026-06-30",
       "priority": "high",
       "done": false,
-      "editing": true,
+      "editing": false,
       "logs": [
         {
           "date": "2026-06-12",
