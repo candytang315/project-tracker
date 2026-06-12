@@ -40,8 +40,8 @@
       "task": "接手品木舊櫃改裝",
       "date": "2026-06-30",
       "priority": "high",
-      "done": false,
-      "editing": false,
+      "done": true,
+      "editing": true,
       "logs": [
         {
           "date": "2026-06-12",
