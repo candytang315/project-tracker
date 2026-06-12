@@ -42,7 +42,12 @@
       "priority": "high",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-06-15",
+          "note": "匡會去百貨看現況\n需要問一下百貨可不可以提供CAD & SKP圖檔"
+        }
+      ]
     }
   ],
   "repairs": [],
