@@ -32,8 +32,19 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 10,
+      "name": "ELEMIS - 漢神巨蛋",
+      "arrived": "2026-06-12",
+      "task": "接手品木舊櫃改裝",
+      "date": "2026-06-30",
+      "priority": "high",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
   "repairs": [],
-  "nextId": 10
+  "nextId": 11
 }
