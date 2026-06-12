@@ -7,7 +7,10 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f3; padding: 1.5rem; color: #1a1a1a; }
-.wrap { max-width: 720px; margin: 0 auto; }
+.wrap { max-width: 1080px; margin: 0 auto; }
+.layout { display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; align-items: start; }
+.left-col { min-width: 0; }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
 .page-title { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
 .week-label { font-size: 13px; color: #666; margin-bottom: 1.5rem; }
 .sec-title { font-size: 13px; font-weight: 500; color: #555; margin-bottom: 10px; }
@@ -70,6 +73,28 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
 .modal-box h3 { font-size: 15px; margin-bottom: 10px; }
 .modal-box p { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.6; }
 .modal-box input { margin-bottom: 10px; }
+
+.cal-card { background: #fff; border: 1px solid #e5e5e3; border-radius: 12px; padding: 1rem; margin-bottom: 10px; }
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cal-header button { background: none; border: none; cursor: pointer; font-size: 16px; color: #888; padding: 2px 6px; }
+.cal-header button:hover { color: #333; }
+.cal-title { font-weight: 500; font-size: 14px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; font-size: 12px; text-align: center; }
+.cal-grid .dow { font-size: 11px; color: #999; padding-bottom: 4px; }
+.cal-day { padding: 6px 0; border-radius: 6px; position: relative; cursor: default; }
+.cal-day.other-month { color: #ccc; }
+.cal-day.today { border: 1.5px solid #378ADD; font-weight: 500; }
+.cal-dot { width: 5px; height: 5px; border-radius: 50%; margin: 2px auto 0; }
+.cal-legend { margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee; font-size: 11px; color: #888; line-height: 1.8; }
+.cal-legend .leg-row { display: flex; align-items: center; gap: 6px; }
+.cal-legend .leg-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.today-card-title { font-weight: 500; font-size: 13px; margin-bottom: 10px; }
+.today-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0ee; }
+.today-item:last-child { border-bottom: none; }
+.today-item .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.today-item .ti-name { font-size: 13px; margin: 0; font-weight: 500; }
+.today-item .ti-sub { font-size: 12px; color: #888; margin: 2px 0 0; }
+.today-empty { font-size: 13px; color: #bbb; }
 </style>
 </head>
 <body>
@@ -86,6 +111,9 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
 <div class="wrap">
   <h1 class="page-title">專案週報</h1>
   <p class="week-label" id="week-range"></p>
+
+<div class="layout">
+<div class="left-col">
 
   <div class="sync-bar">
     <span class="status-dot" id="status-dot"></span>
@@ -141,6 +169,31 @@ select, input[type="text"], input[type="date"] { font-size: 13px; padding: 5px 9
   <button class="btn-export" onclick="exportReport()">複製週報給 Claude 整理</button>
   <span class="copied" id="copied">已複製 ✓</span>
   <div class="export-box" id="export-box"></div>
+
+</div>
+
+<div class="right-col">
+  <div class="cal-card">
+    <div class="cal-header">
+      <button onclick="calPrevMonth()">‹</button>
+      <span class="cal-title" id="cal-title"></span>
+      <button onclick="calNextMonth()">›</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-legend">
+      <div class="leg-row"><span class="leg-dot" style="background:#378ADD;"></span>指派日期</div>
+      <div class="leg-row"><span class="leg-dot" style="background:#A32D2D;"></span>預計完成（高）</div>
+      <div class="leg-row"><span class="leg-dot" style="background:#854F0B;"></span>預計完成（中）</div>
+      <div class="leg-row"><span class="leg-dot" style="background:#3B6D11;"></span>預計完成（低）</div>
+    </div>
+  </div>
+  <div class="cal-card">
+    <p class="today-card-title" id="today-title"></p>
+    <div id="today-list"></div>
+  </div>
+</div>
+
+</div>
 </div>
 
 <script>
@@ -297,7 +350,126 @@ function scheduleSave(){
   saveTimer=setTimeout(saveToGitHub, 800);
 }
 
-function rerender(){ render(); scheduleSave(); }
+function rerender(){ render(); renderCalendar(); scheduleSave(); }
+
+let calViewYear, calViewMonth;
+(function(){
+  const now=new Date();
+  calViewYear=now.getFullYear();
+  calViewMonth=now.getMonth();
+})();
+
+function priorityColor(p){
+  if(p==='high') return '#A32D2D';
+  if(p==='mid')  return '#854F0B';
+  if(p==='low')  return '#3B6D11';
+  return '#888';
+}
+
+function collectAllItems(){
+  return [...projects.map(p=>({...p,_type:'project'})), ...repairs.map(p=>({...p,_type:'repair'}))];
+}
+
+function calPrevMonth(){
+  calViewMonth--;
+  if(calViewMonth<0){calViewMonth=11;calViewYear--;}
+  renderCalendar();
+}
+function calNextMonth(){
+  calViewMonth++;
+  if(calViewMonth>11){calViewMonth=0;calViewYear++;}
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const titleEl=document.getElementById('cal-title');
+  const gridEl=document.getElementById('cal-grid');
+  if(!titleEl||!gridEl) return;
+
+  titleEl.textContent=`${calViewYear}年${calViewMonth+1}月`;
+
+  const items=collectAllItems().filter(p=>!p.done);
+
+  const eventsByDate={};
+  items.forEach(p=>{
+    if(p.arrived){
+      (eventsByDate[p.arrived]=eventsByDate[p.arrived]||[]).push({type:'arrived',color:'#378ADD'});
+    }
+    if(p.date){
+      (eventsByDate[p.date]=eventsByDate[p.date]||[]).push({type:'due',color:priorityColor(p.priority)});
+    }
+  });
+
+  const firstDay=new Date(calViewYear,calViewMonth,1);
+  const startWeekday=firstDay.getDay();
+  const daysInMonth=new Date(calViewYear,calViewMonth+1,0).getDate();
+  const daysInPrevMonth=new Date(calViewYear,calViewMonth,0).getDate();
+
+  const todayStr_=todayStr();
+
+  let html='';
+  ['日','一','二','三','四','五','六'].forEach(d=>html+=`<div class="dow">${d}</div>`);
+
+  for(let i=0;i<startWeekday;i++){
+    html+=`<div class="cal-day other-month">${daysInPrevMonth-startWeekday+1+i}</div>`;
+  }
+
+  for(let d=1;d<=daysInMonth;d++){
+    const dateKey=`${calViewYear}-${String(calViewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=dateKey===todayStr_;
+    let dotsHtml='';
+    if(eventsByDate[dateKey]){
+      dotsHtml=eventsByDate[dateKey].map(e=>`<div class="cal-dot" style="background:${e.color};"></div>`).join('');
+    }
+    html+=`<div class="cal-day ${isToday?'today':''}">${d}${dotsHtml}</div>`;
+  }
+
+  const totalCells=startWeekday+daysInMonth;
+  const remain=(7-(totalCells%7))%7;
+  for(let i=1;i<=remain;i++){
+    html+=`<div class="cal-day other-month">${i}</div>`;
+  }
+
+  gridEl.innerHTML=html;
+  renderTodayList();
+}
+
+function renderTodayList(){
+  const titleEl=document.getElementById('today-title');
+  const listEl=document.getElementById('today-list');
+  if(!titleEl||!listEl) return;
+
+  const now=new Date();
+  titleEl.textContent=`${now.getMonth()+1}月${now.getDate()}日 今日行程`;
+
+  const t=todayStr();
+  const items=collectAllItems().filter(p=>!p.done);
+  const todayItems=[];
+
+  items.forEach(p=>{
+    if(p.arrived===t){
+      todayItems.push({name:p.name,sub:'指派日期到了',color:'#378ADD'});
+    }
+    if(p.date===t){
+      const labelMap={high:'高優先',mid:'中優先',low:'低優先'};
+      todayItems.push({name:p.name,sub:`預計完成日期到了 · ${labelMap[p.priority]||''}`,color:priorityColor(p.priority)});
+    }
+  });
+
+  if(!todayItems.length){
+    listEl.innerHTML='<div class="today-empty">今天沒有指派或預計完成的項目</div>';
+    return;
+  }
+
+  listEl.innerHTML=todayItems.map(it=>`
+    <div class="today-item">
+      <span class="dot" style="background:${it.color};"></span>
+      <div>
+        <p class="ti-name">${it.name}</p>
+        <p class="ti-sub">${it.sub}</p>
+      </div>
+    </div>`).join('');
+}
 
 function markDone(type,id)  {getList(type).find(p=>p.id===id).done=true;    rerender();}
 function undoDone(type,id)  {getList(type).find(p=>p.id===id).done=false;   rerender();}
@@ -426,6 +598,7 @@ async function loadFromGitHub(){
       repairs=[];
       nextId=10;
       render();
+      renderCalendar();
       await saveToGitHub();
       return;
     }
@@ -437,6 +610,7 @@ async function loadFromGitHub(){
     repairs=(content.repairs||[]).map(p=>({...p,editing:false}));
     nextId=content.nextId||1;
     render();
+    renderCalendar();
     setStatus('ok','已同步');
   }catch(e){
     console.error(e);
