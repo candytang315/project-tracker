@@ -137,6 +137,50 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 .history-item .h-restore { font-size: 12px; padding: 4px 10px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
 .history-item .h-restore:hover { background: #f0f0ee; }
 .history-loading { font-size: 13px; color: #999; padding: 12px 0; text-align: center; }
+
+/* ===== 手機版 RWD ===== */
+@media (max-width: 768px) {
+  body { padding: 0.75rem; }
+
+  /* 三欄改成單欄 */
+  .layout { grid-template-columns: 1fr; gap: 0.75rem; }
+
+  /* 左側導覽改成橫向 tab 列 */
+  .nav-col { display: flex; flex-direction: row; gap: 6px; overflow-x: auto; padding: 0.5rem; }
+  .nav-item { white-space: nowrap; padding: 8px 12px; font-size: 13px; flex-shrink: 0; margin-bottom: 0; }
+  .nav-item .nav-chevron { display: none; }
+  .nav-sub-wrap { display: none !important; }
+
+  /* 右側月曆隱藏（手機螢幕太窄） */
+  .right-col { display: none; }
+
+  /* 卡片 header 改為上下排列 */
+  .card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .card-left { width: 100%; }
+  .card-actions { width: 100%; display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 4px; }
+
+  /* 編輯區 grid 改單欄 */
+  .edit-grid { grid-template-columns: 1fr; }
+  .edit-grid .full { grid-column: 1; }
+
+  /* 新增表單 grid 改單欄 */
+  .add-grid { grid-template-columns: 1fr; }
+  .add-grid .full { grid-column: 1; text-align: left; }
+
+  /* sync-bar 簡化 */
+  .sync-bar { flex-wrap: wrap; gap: 6px; font-size: 13px; }
+
+  /* 週報標題 */
+  .page-title { font-size: 16px; }
+  .week-label { font-size: 12px; }
+
+  /* 待辦日期輸入列 */
+  .add-rem { flex-direction: column; }
+  .add-rem input[type="date"] { width: 100%; }
+
+  /* 進度記錄輸入列 */
+  .add-log { gap: 6px; }
+}
 </style>
 </head>
 <body>
