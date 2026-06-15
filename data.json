@@ -71,7 +71,12 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-06-15",
+          "note": "文彬說下一檔道具要6/26到櫃上\n請杰易安排6/26-7/3去拆電視"
+        }
+      ]
     }
   ],
   "nextId": 12
