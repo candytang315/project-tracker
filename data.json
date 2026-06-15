@@ -127,7 +127,12 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-05-27",
+          "note": "收到維修通報，已傳給預知力"
+        }
+      ]
     }
   ],
   "nextId": 14
