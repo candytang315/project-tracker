@@ -181,6 +181,11 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
   /* 進度記錄輸入列 */
   .add-log { gap: 6px; }
 }
+
+.cal-day.weekend { color: #C0392B; }
+.cal-day.holiday { background: #FEF0F0; color: #C0392B; font-weight: 500; }
+.cal-day.holiday.today { border-color: #C0392B; }
+.cal-holiday-dot { width: 5px; height: 5px; border-radius: 50%; background: #E74C3C; margin: 1px auto 0; }
 </style>
 </head>
 <body>
@@ -312,6 +317,29 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 </div>
 
 <script>
+
+const TW_HOLIDAYS_2026 = {
+  '2026-01-01': '元旦',
+  '2026-02-15': '小年夜',
+  '2026-02-16': '除夕',
+  '2026-02-17': '春節初一',
+  '2026-02-18': '春節初二',
+  '2026-02-19': '春節初三',
+  '2026-02-20': '春節補假',
+  '2026-02-28': '和平紀念日',
+  '2026-04-04': '兒童節',
+  '2026-04-05': '清明節',
+  '2026-05-01': '勞動節',
+  '2026-06-19': '端午節',
+  '2026-09-25': '中秋節',
+  '2026-09-28': '教師節',
+  '2026-10-09': '國慶補假',
+  '2026-10-10': '國慶日',
+  '2026-10-25': '台灣光復節',
+  '2026-10-26': '光復節補假',
+  '2026-12-25': '行憲紀念日',
+};
+
 const GH_OWNER='candytang315';
 const GH_REPO='project-tracker';
 const GH_PATH='data.json';
@@ -646,11 +674,17 @@ function renderCalendar(){
     }
     const hasEvent=!!eventsByDate[dateKey];
     const isSelected=dateKey===selectedDate;
+    const isHoliday=!!TW_HOLIDAYS_2026[dateKey];
+    const dayOfWeek=(firstDay.getDay()+d-1)%7;
+    const isWeekend=dayOfWeek===0||dayOfWeek===6;
     const classes=['cal-day'];
     if(isToday) classes.push('today');
     if(hasEvent) classes.push('has-event');
     if(isSelected) classes.push('selected');
-    html+=`<div class="${classes.join(' ')}" onclick="selectCalDate('${dateKey}')">${d}${dotsHtml}</div>`;
+    if(isHoliday) classes.push('holiday');
+    else if(isWeekend) classes.push('weekend');
+    const holidayDot=isHoliday?'<div class="cal-holiday-dot"></div>':'';
+    html+=`<div class="${classes.join(' ')}" onclick="selectCalDate('${dateKey}')" title="${isHoliday?TW_HOLIDAYS_2026[dateKey]:''}">${d}${holidayDot}${dotsHtml}</div>`;
   }
 
   const totalCells=startWeekday+daysInMonth;
@@ -676,7 +710,8 @@ function renderDayList(){
   const t=selectedDate;
   const isToday=t===todayStr();
   const [y,m,d]=t.split('-').map(Number);
-  titleEl.textContent=isToday?`${m}月${d}日 今日行程`:`${m}月${d}日 行程`;
+  const holidayName=TW_HOLIDAYS_2026[t]||'';
+  titleEl.textContent=isToday?`${m}月${d}日 今日行程${holidayName?' · '+holidayName:''}`:`${m}月${d}日 行程${holidayName?' · '+holidayName:''}`;
 
   const items=collectAllItems().filter(p=>!p.done);
   const dayItems=[];
