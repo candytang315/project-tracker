@@ -101,7 +101,18 @@
           "note": "台中三越電視移除"
         }
       ]
+    },
+    {
+      "id": 12,
+      "name": "LOC - 漢神洲際",
+      "arrived": "2026-06-12",
+      "task": "水槽蓋板刮痕修補",
+      "date": "2026-06-30",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 12
+  "nextId": 13
 }
