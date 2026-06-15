@@ -31,7 +31,12 @@
       "priority": "low",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-06-09",
+          "note": "提供小賴辦公室修改為會議室平面圖"
+        }
+      ]
     },
     {
       "id": 10,
