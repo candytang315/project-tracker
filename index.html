@@ -187,6 +187,11 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 .cal-day.holiday { background: #FEF0F0; color: #C0392B; font-weight: 500; }
 .cal-day.holiday.today { border-color: #C0392B; }
 .cal-holiday-dot { width: 5px; height: 5px; border-radius: 50%; background: #E74C3C; margin: 1px auto 0; }
+
+.brand-row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.brand-btn { font-size: 12px; padding: 4px 10px; border-radius: var(--border-radius-md); border: 0.5px solid #ddd; background: #fff; color: #555; cursor: pointer; font-weight: 500; }
+.brand-btn:hover { background: #f0f0ee; }
+.brand-btn.selected { background: #E6F1FB; border-color: #378ADD; color: #185FA5; }
 </style>
 </head>
 <body>
@@ -255,7 +260,15 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
     <div class="add-card">
       <div class="sec-title" style="margin-bottom:10px;">新增專案</div>
       <div class="add-grid">
-        <div><label class="edit-label">專案名稱</label><input type="text" id="an" placeholder="例：忠孝SOGO" /></div>
+        <div class="full">
+        <label class="edit-label">品牌（選填，選了會自動加在名稱前）</label>
+        <div class="brand-row" id="brand-row-project">
+          <button type="button" class="brand-btn" onclick="selectBrand('project','LOC')">LOC</button>
+          <button type="button" class="brand-btn" onclick="selectBrand('project','ELE')">ELE</button>
+          <button type="button" class="brand-btn selected" onclick="selectBrand('project','')">不選（自填）</button>
+        </div>
+      </div>
+      <div><label class="edit-label">專案名稱</label><input type="text" id="an" placeholder="例：漢神洲際" /></div>
         <div><label class="edit-label">指派日期</label><input type="date" id="aa" /></div>
         <div><label class="edit-label">專案說明／備註</label><textarea id="at" placeholder="例：局部修改後送百貨圖審" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
         <div><label class="edit-label">預計完成日期</label><input type="date" id="ad" /></div>
@@ -273,7 +286,15 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
     <div class="add-card">
       <div class="sec-title" style="margin-bottom:10px;">新增維修及零星工程</div>
       <div class="add-grid">
-        <div><label class="edit-label">工程名稱</label><input type="text" id="rn" placeholder="例：漢神巨蛋燈具維修" /></div>
+        <div class="full">
+        <label class="edit-label">品牌（選填，選了會自動加在名稱前）</label>
+        <div class="brand-row" id="brand-row-repair">
+          <button type="button" class="brand-btn" onclick="selectBrand('repair','LOC')">LOC</button>
+          <button type="button" class="brand-btn" onclick="selectBrand('repair','ELE')">ELE</button>
+          <button type="button" class="brand-btn selected" onclick="selectBrand('repair','')">不選（自填）</button>
+        </div>
+      </div>
+      <div><label class="edit-label">工程名稱</label><input type="text" id="rn" placeholder="例：漢神洲際燈具維修" /></div>
         <div><label class="edit-label">指派日期</label><input type="date" id="ra" /></div>
         <div><label class="edit-label">工程內容／備註</label><textarea id="rt" placeholder="例：燈具損壞需更換" rows="2" style="resize:vertical;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fafafa;color:#1a1a1a;width:100%;"></textarea></div>
         <div><label class="edit-label">預計完成日期</label><input type="date" id="rd" /></div>
@@ -842,19 +863,36 @@ function saveLog(type,id,li){
   rerender();
 }
 
+let selectedBrand = { project: '', repair: '' };
+
+function selectBrand(type, brand){
+  selectedBrand[type] = brand;
+  const row = document.getElementById('brand-row-' + type);
+  row.querySelectorAll('.brand-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    if(btn.textContent === (brand || '不選（自填）')) btn.classList.add('selected');
+  });
+}
+
 function addItem(type){
   if(type==='repair'){
     const name=document.getElementById('rn').value.trim();
     if(!name)return;
-    repairs.push({id:nextId++,name,arrived:document.getElementById('ra').value,task:document.getElementById('rt').value,date:document.getElementById('rd').value,priority:document.getElementById('rp').value,done:false,editing:false,logs:[]});
+    const repairBrandPrefix = selectedBrand['repair'] ? selectedBrand['repair'] + ' - ' : '';
+    const finalRepairName = repairBrandPrefix + name;
+    repairs.push({id:nextId++,name:finalRepairName,arrived:document.getElementById('ra').value,task:document.getElementById('rt').value,date:document.getElementById('rd').value,priority:document.getElementById('rp').value,done:false,editing:false,logs:[]});
     ['rn','ra','rt','rd'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('rp').value='mid';
+    selectBrand('repair','');
   } else {
     const name=document.getElementById('an').value.trim();
     if(!name)return;
-    projects.push({id:nextId++,name,arrived:document.getElementById('aa').value,task:document.getElementById('at').value,date:document.getElementById('ad').value,priority:document.getElementById('ap').value,done:false,editing:false,logs:[]});
+    const brandPrefix = selectedBrand['project'] ? selectedBrand['project'] + ' - ' : '';
+    const finalName = brandPrefix + name;
+    projects.push({id:nextId++,name:finalName,arrived:document.getElementById('aa').value,task:document.getElementById('at').value,date:document.getElementById('ad').value,priority:document.getElementById('ap').value,done:false,editing:false,logs:[]});
     ['an','aa','at','ad'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('ap').value='mid';
+    selectBrand('project','');
   }
   rerender();
 }
