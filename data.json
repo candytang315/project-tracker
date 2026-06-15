@@ -20,7 +20,12 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-06-10",
+          "note": "Evan說提供三版本(朝內、朝外、雙面)供選擇"
+        }
+      ]
     },
     {
       "id": 3,
