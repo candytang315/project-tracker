@@ -174,7 +174,7 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
   .page-title { font-size: 16px; }
   .week-label { font-size: 12px; }
 
-  /* 待辦日期輸入列 */
+  /* 待辦事項輸入列 */
   .add-rem { flex-direction: column; }
   .add-rem input[type="date"] { width: 100%; }
 
@@ -439,7 +439,7 @@ function cardHtml(p){
 
   const remindersSection=p.done?'':`
     <div class="reminders-area">
-      <div class="reminders-label">待辦日期</div>
+      <div class="reminders-label">待辦事項</div>
       ${remindersHtml}
       <div class="add-rem">
         <input type="date" id="rmd-${p.id}" value="${todayStr()}" />
