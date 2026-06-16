@@ -169,7 +169,12 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": [],
+      "logs": [
+        {
+          "date": "2026-06-16",
+          "note": "杰易請我準備電視盒\n還有一條短的HDMI線"
+        }
+      ],
       "reminders": [
         {
           "date": "2026-06-17",
