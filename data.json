@@ -191,7 +191,13 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [],
+      "reminders": [
+        {
+          "date": "2026-06-17",
+          "note": "準備電視盒及線材"
+        }
+      ]
     }
   ],
   "nextId": 17
