@@ -181,7 +181,18 @@
           "note": "匡會去看現場確認問題"
         }
       ]
+    },
+    {
+      "id": 16,
+      "name": "LOC - 竹北遠東",
+      "arrived": "2026-06-16",
+      "task": "畫架電視調整工程",
+      "date": "2026-06-17",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 16
+  "nextId": 17
 }
