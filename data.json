@@ -88,6 +88,17 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 15,
+      "name": "LOC - 竹北遠東",
+      "arrived": "2026-06-16",
+      "task": "畫架電視修改",
+      "date": "2026-06-17",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
   "repairs": [
@@ -161,5 +172,5 @@
       ]
     }
   ],
-  "nextId": 15
+  "nextId": 16
 }
