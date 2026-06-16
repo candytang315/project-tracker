@@ -73,6 +73,17 @@
           "note": "6/15 匡去百貨看現況 需要問一下百貨可不可以提供CAD & SKP圖檔"
         }
       ]
+    },
+    {
+      "id": 14,
+      "name": "LOC - 信義A11",
+      "arrived": "2026-06-04",
+      "task": "局部修改設計圖 → 圖審送件",
+      "date": "",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
   "repairs": [
@@ -146,5 +157,5 @@
       ]
     }
   ],
-  "nextId": 14
+  "nextId": 15
 }
