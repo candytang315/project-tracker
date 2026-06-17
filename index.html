@@ -192,6 +192,9 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 .brand-btn { font-size: 12px; padding: 4px 10px; border-radius: var(--border-radius-md); border: 0.5px solid #ddd; background: #fff; color: #555; cursor: pointer; font-weight: 500; }
 .brand-btn:hover { background: #f0f0ee; }
 .brand-btn.selected { background: #E6F1FB; border-color: #378ADD; color: #185FA5; }
+
+.rem-checkbox { width: 16px; height: 16px; margin-top: 2px; cursor: pointer; flex-shrink: 0; accent-color: #378ADD; }
+.rem-text.rem-done { text-decoration: line-through; color: #bbb; }
 </style>
 </head>
 <body>
@@ -479,8 +482,9 @@ function cardHtml(p){
     }
     return `
       <div class="rem-row">
+        <input type="checkbox" class="rem-checkbox" ${r.done?'checked':''} onchange="toggleReminderDone('${p._type}',${p.id},${ri})" />
         <span class="rem-date">${fmtDate(r.date)||'—'}</span>
-        <span class="rem-text">${r.note}</span>
+        <span class="rem-text ${r.done?'rem-done':''}">${r.note}</span>
         <button class="rem-icon cal" onclick="addReminderToGoogleCalendar('${p._type}',${p.id},${ri})" title="加入 Google 行事曆">📅</button>
         <button class="rem-icon" onclick="editReminder('${p._type}',${p.id},${ri})" title="編輯">✎</button>
         <button class="rem-icon del" onclick="deleteReminder('${p._type}',${p.id},${ri})" title="刪除">✕</button>
@@ -827,6 +831,12 @@ function saveReminder(type,id,ri){
   p.reminders[ri].date=document.getElementById(`re-date-${id}-${ri}`).value;
   p.reminders[ri].note=document.getElementById(`re-note-${id}-${ri}`).value.trim();
   p.reminders[ri].editing=false;
+  rerender();
+}
+
+function toggleReminderDone(type,id,ri){
+  const p=getList(type).find(p=>p.id===id);
+  p.reminders[ri].done = !p.reminders[ri].done;
   rerender();
 }
 
