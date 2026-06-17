@@ -9,7 +9,12 @@
       "priority": "high",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-06-16",
+          "note": "重新出圖(3D+平面)"
+        }
+      ]
     },
     {
       "id": 2,
