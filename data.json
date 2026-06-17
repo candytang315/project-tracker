@@ -88,6 +88,17 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 17,
+      "name": "LOC - 南西三越",
+      "arrived": "2026-06-17",
+      "task": "新增AOS桌\n放在原本手霜塔位置(手霜塔可丟)\n預計周慶後安裝\n",
+      "date": "2026-11-15",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
   "repairs": [
@@ -191,5 +202,5 @@
       ]
     }
   ],
-  "nextId": 17
+  "nextId": 18
 }
