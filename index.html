@@ -468,7 +468,17 @@ function cardHtml(p){
       <button class="btn-icon" onclick="editItem('${p._type}',${p.id})" title="編輯">✎</button>
       <button class="btn-icon del" onclick="deleteItem('${p._type}',${p.id})" title="刪除">🗑</button>`;
 
-  const remindersHtml=(p.reminders||[]).map((r,ri)=>{
+  const sortedReminders = (p.reminders||[])
+    .map((r,originalIndex)=>({...r,originalIndex}))
+    .sort((a,b)=>{
+      if(!a.date && !b.date) return 0;
+      if(!a.date) return 1;
+      if(!b.date) return -1;
+      return a.date.localeCompare(b.date);
+    });
+
+  const remindersHtml=sortedReminders.map((r)=>{
+    const ri=r.originalIndex;
     if(r.editing){
       return `
       <div class="rem-row" style="background:#f0f4ff;padding:6px;border-radius:6px;">
