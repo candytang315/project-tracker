@@ -269,7 +269,13 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [],
+      "reminders": [
+        {
+          "date": "2026-06-18",
+          "note": "竹北遠東畫架電視修改"
+        }
+      ]
     }
   ],
   "nextId": 19
