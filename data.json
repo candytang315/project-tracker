@@ -259,30 +259,6 @@
           "done": true
         }
       ]
-    },
-    {
-      "id": 18,
-      "name": "LOC - 竹北遠東",
-      "arrived": "2026-05-30",
-      "task": "畫架電視修改為電視盒",
-      "date": "2026-06-20",
-      "priority": "mid",
-      "done": false,
-      "editing": false,
-      "logs": [
-        {
-          "date": "2026-06-18",
-          "note": "電視盒使用原豐原太平洋設備"
-        }
-      ],
-      "reminders": [
-        {
-          "date": "2026-06-18",
-          "note": "竹北遠東畫架電視修改",
-          "editing": false,
-          "done": true
-        }
-      ]
     }
   ],
   "nextId": 19
