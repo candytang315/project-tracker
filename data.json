@@ -259,7 +259,18 @@
           "done": true
         }
       ]
+    },
+    {
+      "id": 18,
+      "name": "LOC - 竹北遠東",
+      "arrived": "2026-05-30",
+      "task": "畫架電視修改為電視盒",
+      "date": "2026-06-20",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 18
+  "nextId": 19
 }
