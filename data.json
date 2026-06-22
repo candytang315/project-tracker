@@ -263,7 +263,18 @@
           "done": true
         }
       ]
+    },
+    {
+      "id": 19,
+      "name": "LOC - 新竹巨城",
+      "arrived": "2026-06-22",
+      "task": "店內投射燈檢查",
+      "date": "",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 19
+  "nextId": 20
 }
