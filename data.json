@@ -21,7 +21,8 @@
         },
         {
           "date": "2026-06-24",
-          "note": "Evan說要渲染圖給百貨圖審"
+          "note": "Evan說要渲染圖給百貨圖審，下週也要提交施工圖",
+          "editing": false
         }
       ],
       "reminders": [
