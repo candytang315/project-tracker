@@ -430,7 +430,13 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [],
+      "reminders": [
+        {
+          "date": "2026-07-09",
+          "note": "已申請處理蟲蛀問題"
+        }
+      ]
     },
     {
       "id": 21,
