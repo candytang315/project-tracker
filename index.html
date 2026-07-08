@@ -415,8 +415,18 @@ function badgeHtml(p){
 function fmtDate(s){if(!s)return'';const[,m,d]=s.split('-');return`${parseInt(m)}/${parseInt(d)}`;}
 
 function cardHtml(p){
-  const logsHtml=p.logs.length
-    ?p.logs.map((l,li)=>{
+  const sortedLogs = (p.logs||[])
+    .map((l,originalIndex)=>({...l,originalIndex}))
+    .sort((a,b)=>{
+      if(!a.date && !b.date) return 0;
+      if(!a.date) return 1;
+      if(!b.date) return -1;
+      return a.date.localeCompare(b.date);
+    });
+
+  const logsHtml=sortedLogs.length
+    ?sortedLogs.map((l)=>{
+    const li=l.originalIndex;
       if(l.editing){
         return `
       <div class="log-row" style="background:#f0f4ff;padding:6px;border-radius:6px;">
