@@ -407,7 +407,7 @@
       "task": "店內投射燈檢查",
       "date": "",
       "priority": "mid",
-      "done": false,
+      "done": true,
       "editing": false,
       "logs": [
         {
@@ -431,7 +431,18 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 21,
+      "name": "LOC - 京站 - 電視線外露",
+      "arrived": "2026-07-08",
+      "task": "文彬反應乾燥花撤掉後電視設備的線材外露",
+      "date": "",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 21
+  "nextId": 22
 }
