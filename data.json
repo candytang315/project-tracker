@@ -217,7 +217,12 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-07-08",
+          "note": "局部裝修案還是要做\n但也會重新改裝，圖面要重新規劃"
+        }
+      ]
     },
     {
       "id": 17,
