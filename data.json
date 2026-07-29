@@ -229,11 +229,12 @@
         {
           "date": "2026-07-14",
           "note": "回覆國外收邊問題",
-          "done": false
+          "done": true
         },
         {
           "date": "2026-07-28",
-          "note": "提供大燈箱尺寸給ELEMIS"
+          "note": "提供大燈箱尺寸給ELEMIS",
+          "done": true
         }
       ]
     },
