@@ -399,7 +399,7 @@
       "task": "階梯貨架間接燈色溫不均",
       "date": "2026-06-30",
       "priority": "mid",
-      "done": false,
+      "done": true,
       "editing": false,
       "logs": [
         {
@@ -533,7 +533,18 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 24,
+      "name": "LOC - 中山SPA - 水槽特殊漆修補",
+      "arrived": "2026-07-15",
+      "task": "水槽粉色特殊剝落需要補漆",
+      "date": "",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 24
+  "nextId": 25
 }
