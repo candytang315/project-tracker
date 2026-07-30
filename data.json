@@ -554,7 +554,12 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-07-30",
+          "note": "已申請修繕"
+        }
+      ]
     }
   ],
   "nextId": 26
