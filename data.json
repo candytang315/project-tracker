@@ -544,7 +544,18 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 25,
+      "name": "LOC - 巡櫃修繕 - 特殊漆修補",
+      "arrived": "2026-07-02",
+      "task": "A11及南西水槽特殊漆修補",
+      "date": "",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 25
+  "nextId": 26
 }
