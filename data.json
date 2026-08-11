@@ -196,12 +196,14 @@
         {
           "date": "2026-08-05",
           "note": "陳列",
-          "editing": false
+          "editing": false,
+          "done": true
         },
         {
           "date": "2026-08-06",
           "note": "開幕",
-          "editing": false
+          "editing": false,
+          "done": true
         },
         {
           "date": "2026-06-25",
@@ -241,7 +243,8 @@
         },
         {
           "date": "2026-08-04",
-          "note": "驗收"
+          "note": "驗收",
+          "done": true
         }
       ]
     },
