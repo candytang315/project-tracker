@@ -51,12 +51,14 @@
         {
           "date": "2026-08-19",
           "note": "進場/一夜完工",
-          "editing": false
+          "editing": false,
+          "done": true
         },
         {
           "date": "2026-08-20",
           "note": "07:00陳列",
-          "editing": false
+          "editing": false,
+          "done": true
         },
         {
           "date": "2026-07-01",
