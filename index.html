@@ -137,32 +137,65 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 .budget-source-sub.warn { color:#854F0B; }
 .budget-source-sub.ok { color:#3B6D11; }
 .budget-source-sub.muted { color:#aaa; }
-.budget-table-wrap { background:#fff; border:1px solid #e5e5e3; border-radius:10px; overflow:hidden; }
-.budget-table { width:100%; border-collapse:collapse; font-size:13px; }
-.budget-table th { background:#f7f7f5; color:#999; font-weight:500; font-size:12px; padding:9px 14px; text-align:left; border-bottom:1px solid #e5e5e3; }
-.budget-table td { padding:11px 14px; border-bottom:1px solid #f0f0ee; vertical-align:middle; color:#333; }
-.budget-table tr:last-child td { border-bottom:none; }
-.budget-link-btn { background:none; border:none; color:#378ADD; font-size:12px; cursor:pointer; padding:2px 6px; border-radius:4px; text-decoration:underline; white-space:nowrap; }
-.budget-link-btn:hover { background:#E6F1FB; }
+/* 預算項目列表（抽屜式） */
+.budget-item-list { display:flex; flex-direction:column; gap:4px; margin-bottom:8px; }
+.budget-item-row { background:#fff; border:1px solid #e5e5e3; border-radius:8px; overflow:hidden; transition:box-shadow .15s; }
+.budget-item-row:hover { box-shadow:0 2px 8px rgba(0,0,0,.08); }
+.budget-item-header { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1.4fr) 70px 70px minmax(0,2fr) auto; gap:10px; align-items:center; padding:12px 14px; cursor:pointer; }
+.budget-item-name { font-weight:500; font-size:14px; color:#1a1a1a; }
+.budget-item-note { font-size:11px; color:#bbb; margin-top:2px; }
+.budget-item-src  { font-size:13px; color:#666; }
+.budget-item-num  { font-size:13px; font-variant-numeric:tabular-nums; color:#333; }
+.budget-item-num.dash { color:#ccc; }
+.budget-item-links { display:flex; gap:6px; flex-wrap:wrap; }
+.budget-link-btn { background:none; border:none; color:#378ADD; font-size:12px; cursor:pointer; padding:2px 8px; border-radius:20px; background:#E6F1FB; white-space:nowrap; }
+.budget-link-btn:hover { background:#378ADD; color:#fff; }
+.budget-item-acts { display:flex; gap:4px; justify-content:flex-end; flex-shrink:0; }
+.bact-btn { font-size:12px; padding:4px 10px; border:none; border-radius:5px; cursor:pointer; font-family:inherit; }
+.bact-edit { background:#E6F1FB; color:#185FA5; }
+.bact-del  { background:#FCEBEB; color:#A32D2D; }
+/* 抽屜 */
+.budget-drawer { background:#f0f7ff; border-top:1px solid #c5d8ef; padding:18px; display:none; }
+.budget-drawer.open { display:block; }
+.drawer-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.drawer-field label { display:block; font-size:11px; font-weight:600; color:#666; letter-spacing:.05em; margin-bottom:5px; }
+.drawer-field input, .drawer-field select {
+  width:100%; padding:8px 10px; border:1px solid #c5d8ef; border-radius:6px;
+  font-size:13px; font-family:inherit; background:#fff; color:#1a1a1a; outline:none;
+}
+.drawer-field input:focus, .drawer-field select:focus { border-color:#378ADD; box-shadow:0 0 0 3px rgba(55,138,221,.12); }
+.drawer-num-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.card-picker { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:6px; }
+.card-option {
+  display:flex; align-items:center; gap:8px; padding:8px 10px;
+  border:1px solid #e5e5e3; border-radius:6px; cursor:pointer;
+  font-size:12px; background:#fff; transition:border-color .12s, background .12s;
+}
+.card-option:hover { border-color:#378ADD; background:#E6F1FB; }
+.card-option.selected { border-color:#378ADD; background:#E6F1FB; }
+.card-option input[type=checkbox] { accent-color:#378ADD; width:14px; height:14px; flex-shrink:0; }
+.drawer-footer { display:flex; gap:8px; padding-top:12px; border-top:1px solid #c5d8ef; margin-top:4px; }
+.drawer-btn { font-size:13px; padding:7px 18px; border:none; border-radius:6px; cursor:pointer; font-family:inherit; font-weight:500; }
+.drawer-btn-primary { background:#378ADD; color:#fff; }
+.drawer-btn-primary:hover { background:#185FA5; }
+.drawer-btn-cancel { background:#e5e5e3; color:#555; }
+.drawer-btn-cancel:hover { background:#ccc; }
+.drawer-btn-danger { background:transparent; color:#A32D2D; border:1px solid #f8d0d0; margin-left:auto; }
+.drawer-btn-danger:hover { background:#FCEBEB; }
+/* 欄位標頭 */
+.budget-col-header { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1.4fr) 70px 70px minmax(0,2fr) auto; gap:10px; padding:7px 14px; font-size:11px; font-weight:600; color:#aaa; letter-spacing:.05em; border-bottom:1px solid #e5e5e3; background:#f7f7f5; border-radius:8px 8px 0 0; border:1px solid #e5e5e3; border-bottom:1px solid #e5e5e3; margin-bottom:2px; }
 .budget-empty { padding:32px; text-align:center; color:#bbb; font-size:14px; }
-.budget-add-btn { margin-top:14px; padding:7px 18px; background:#378ADD; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer; }
+.budget-add-btn { padding:7px 18px; background:#378ADD; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer; }
 .budget-add-btn:hover { background:#185FA5; }
-.budget-edit-row td { background:#f0f7ff; }
-.budget-edit-row input, .budget-edit-row select { font-size:13px; padding:4px 8px; border:1px solid #c5d8ef; border-radius:5px; width:100%; background:#fff; }
-.budget-edit-row textarea { font-size:13px; padding:4px 8px; border:1px solid #c5d8ef; border-radius:5px; width:100%; background:#fff; resize:vertical; }
-.budget-row-actions { display:flex; gap:6px; flex-wrap:wrap; }
-.budget-row-actions button { font-size:12px; padding:3px 10px; border-radius:5px; border:none; cursor:pointer; }
-.btn-edit-row { background:#E6F1FB; color:#185FA5; }
-.btn-save-row { background:#E1F5EE; color:#0F6E56; }
-.btn-del-row  { background:#FCEBEB; color:#A32D2D; }
-.source-edit-wrap { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
-.source-edit-wrap input { font-size:12px; padding:3px 8px; border:1px solid #c5d8ef; border-radius:5px; flex:1; min-width:60px; background:#fff; }
-.source-edit-wrap label { font-size:11px; color:#999; }
 .budget-action-bar { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+/* 預算來源卡片 */
 .budget-source-card { background:#f7f7f5; border-radius:10px; padding:14px 16px; cursor:pointer; position:relative; }
 .budget-source-card:hover .source-edit-toggle { opacity:1; }
 .source-edit-toggle { position:absolute; top:8px; right:8px; font-size:11px; color:#378ADD; opacity:0; background:#E6F1FB; border:none; border-radius:4px; padding:2px 7px; cursor:pointer; }
 .source-card-editing { background:#e8f4ff; }
+.source-edit-wrap { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+.source-edit-wrap input { font-size:12px; padding:3px 8px; border:1px solid #c5d8ef; border-radius:5px; flex:1; min-width:60px; background:#fff; }
+.source-edit-wrap label { font-size:11px; color:#999; }
 .nav-sub-wrap.open { display: block; }
 .nav-item .nav-chevron { font-size: 16px; color: #bbb; transition: transform 0.15s; margin-left: 4px; cursor: pointer; padding: 0 4px; display: inline-block; }
 .nav-item.open .nav-chevron { transform: rotate(90deg); }
@@ -1048,74 +1081,108 @@ function renderBudget(){
     }).join('') + `</div>`;
   }
 
-  // 明細表格（可編輯）
-  let tableHtml = '';
-  const cardOptions = allCards.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-
-  const makeRow = (item, idx) => {
+  // 明細列表（抽屜式）
+  const makeItemRow = (item, idx) => {
     const linkedNames = item.linkedProjects || [];
     const linkedCards = allCards.filter(c=>linkedNames.includes(c.name));
     const linkBtns = linkedCards.map(c=>
       `<button class="budget-link-btn" onclick="jumpToBudgetCard('${c.type}',${c.pid},'${c.tabId}')">${c.name}</button>`
-    ).join(' ');
+    ).join('');
     const noLink = linkedNames.length && !linkedCards.length ? `<span style="color:#ccc;font-size:12px;">（卡片未建立）</span>` : '';
-    const estText = item.estimate ? (item.estimate/10000).toFixed(0)+'萬' : '—';
-    const actText = item.actual ? (item.actual/10000).toFixed(0)+'萬' : '—';
-    const noteText = item.note || '';
-    // 來源選項
+    const estText = item.estimate ? (item.estimate/10000).toFixed(0)+'萬' : '<span class="dash">—</span>';
+    const actText = item.actual ? (item.actual/10000).toFixed(0)+'萬' : '<span class="dash">—</span>';
+
+    // 來源下拉選項
     const srcOpts = sources.map(s=>`<option value="${s.id}" ${s.id===item.source?'selected':''}>${s.name}</option>`).join('');
-    const otherOpts = `<option value="aos_project" ${item.source==='aos_project'?'selected':''}>AOS 130萬專案預算</option><option value="next_fy" ${item.source==='next_fy'?'selected':''}>明年新預算</option><option value="other">其他</option>`;
-    // 已選卡片（multi）
-    const selectedCardIds = allCards.filter(c=>linkedNames.includes(c.name)).map(c=>c.id);
-    return `<tr id="budget-row-${idx}">
-      <td style="font-weight:500;">${item.name}${noteText?`<br><span style="font-size:11px;color:#bbb;">${noteText}</span>`:''}</td>
-      <td style="color:#666;">${item.sourceName||item.source}</td>
-      <td>${estText}</td><td>${actText}</td>
-      <td>${linkBtns}${noLink}</td>
-      <td><div class="budget-row-actions"><button class="btn-edit-row" onclick="openBudgetItemEdit(${idx})">編輯</button><button class="btn-del-row" onclick="deleteBudgetItem(${idx})">刪除</button></div></td>
-    </tr>
-    <tr id="budget-edit-row-${idx}" class="budget-edit-row" style="display:none;">
-      <td><input id="bei-name-${idx}" value="${item.name}" placeholder="工程項目名稱"></td>
-      <td><select id="bei-src-${idx}">${srcOpts}${otherOpts}</select>
-          <input id="bei-srcname-${idx}" value="${item.sourceName||''}" placeholder="自訂來源名稱（選其他時填）" style="margin-top:4px;"></td>
-      <td><input id="bei-est-${idx}" type="number" value="${item.estimate||0}" placeholder="預估金額(元)"></td>
-      <td><input id="bei-act-${idx}" type="number" value="${item.actual||0}" placeholder="實際花費(元)"></td>
-      <td>
-        <div style="font-size:11px;color:#999;margin-bottom:4px;">選擇對應卡片（可複選）：</div>
-        <div id="bei-cards-${idx}" style="max-height:120px;overflow-y:auto;border:1px solid #ddd;border-radius:5px;padding:4px;background:#fff;">
-          ${allCards.map(c=>`<label style="display:block;font-size:12px;padding:2px 4px;cursor:pointer;"><input type="checkbox" value="${c.id}" ${selectedCardIds.includes(c.id)?'checked':''}> ${c.name}</label>`).join('')}
+    const otherOpts = `<option value="aos_project" ${item.source==='aos_project'?'selected':''}>AOS 130萬專案預算</option><option value="next_fy" ${item.source==='next_fy'?'selected':''}>明年新預算</option><option value="other" ${item.source==='other'?'selected':''}>其他</option>`;
+
+    // 卡片勾選器
+    const selectedIds = linkedCards.map(c=>c.id);
+    const cardPicker = allCards.map(c=>`
+      <label class="card-option${selectedIds.includes(c.id)?' selected':''}">
+        <input type="checkbox" value="${c.id}" ${selectedIds.includes(c.id)?'checked':''}
+          onchange="this.closest('.card-option').classList.toggle('selected',this.checked)">
+        ${c.name}
+      </label>`).join('');
+
+    return `<div class="budget-item-row" id="budget-item-${idx}">
+      <div class="budget-item-header">
+        <div>
+          <div class="budget-item-name">${item.name}</div>
+          ${item.note?`<div class="budget-item-note">${item.note}</div>`:''}
         </div>
-      </td>
-      <td>
-        <input id="bei-note-${idx}" value="${item.note||''}" placeholder="備註" style="margin-bottom:6px;">
-        <div class="budget-row-actions">
-          <button class="btn-save-row" onclick="saveBudgetItem(${idx})">儲存</button>
-          <button class="btn-edit-row" onclick="closeBudgetItemEdit(${idx})">取消</button>
+        <div class="budget-item-src">${item.sourceName||item.source||'—'}</div>
+        <div class="budget-item-num${!item.estimate?' dash':''}">${estText}</div>
+        <div class="budget-item-num${!item.actual?' dash':''}">${actText}</div>
+        <div class="budget-item-links">${linkBtns}${noLink}</div>
+        <div class="budget-item-acts">
+          <button class="bact-btn bact-edit" onclick="toggleBudgetDrawer(${idx})">編輯</button>
+          <button class="bact-btn bact-del" onclick="deleteBudgetItem(${idx})">刪除</button>
         </div>
-      </td>
-    </tr>`;
+      </div>
+      <div class="budget-drawer" id="budget-drawer-${idx}">
+        <div class="drawer-grid">
+          <div class="drawer-field">
+            <label>工程項目名稱</label>
+            <input id="bei-name-${idx}" value="${item.name}" placeholder="名稱">
+          </div>
+          <div class="drawer-field">
+            <label>備註</label>
+            <input id="bei-note-${idx}" value="${item.note||''}" placeholder="例：報價中、等明年編列">
+          </div>
+          <div class="drawer-field">
+            <label>預算來源</label>
+            <select id="bei-src-${idx}">${srcOpts}${otherOpts}</select>
+          </div>
+          <div class="drawer-field">
+            <label>自訂來源名稱（選「其他」時填）</label>
+            <input id="bei-srcname-${idx}" value="${item.sourceName||''}" placeholder="自訂名稱">
+          </div>
+          <div class="drawer-field">
+            <label>預估金額（元）</label>
+            <input id="bei-est-${idx}" type="number" value="${item.estimate||0}">
+          </div>
+          <div class="drawer-field">
+            <label>實際花費（元）</label>
+            <input id="bei-act-${idx}" type="number" value="${item.actual||0}">
+          </div>
+        </div>
+        <div class="drawer-field" style="margin-bottom:14px;">
+          <label style="display:block;font-size:11px;font-weight:600;color:#666;letter-spacing:.05em;margin-bottom:8px;">對應卡片（可複選）</label>
+          <div class="card-picker" id="bei-cards-${idx}">${cardPicker}</div>
+        </div>
+        <div class="drawer-footer">
+          <button class="drawer-btn drawer-btn-primary" onclick="saveBudgetItem(${idx})">儲存</button>
+          <button class="drawer-btn drawer-btn-cancel" onclick="toggleBudgetDrawer(${idx})">取消</button>
+          <button class="drawer-btn drawer-btn-danger" onclick="deleteBudgetItem(${idx})">刪除此項目</button>
+        </div>
+      </div>
+    </div>`;
   };
 
-  const rows = items.map((item,idx)=>makeRow(item,idx)).join('');
-  tableHtml = `<div class="budget-table-wrap">
-    <table class="budget-table">
-      <thead><tr>
-        <th>工程項目</th><th>預算來源</th><th>預估金額</th><th>實際花費</th><th>對應卡片</th><th></th>
-      </tr></thead>
-      <tbody id="budget-tbody">${rows}</tbody>
-    </table>
-  </div>`;
+  const colHeader = items.length ? `<div class="budget-col-header">
+    <span>工程項目</span><span>預算來源</span><span>預估</span><span>實際</span><span>對應卡片</span><span></span>
+  </div>` : '';
+
+  const listHtml = items.length
+    ? colHeader + `<div class="budget-item-list">${items.map((item,idx)=>makeItemRow(item,idx)).join('')}</div>`
+    : `<div class="budget-empty">尚無預算明細，點下方按鈕新增</div>`;
 
   el.innerHTML = `
     <div class="sec-title">年度預算</div>
     <div class="budget-fy-bar">${fyBtns}</div>
     ${sourcesHtml || `<div style="color:#bbb;font-size:13px;margin-bottom:16px;">尚未設定預算來源</div>`}
-    ${tableHtml}
+    ${listHtml}
     <div class="budget-action-bar">
       <button class="budget-add-btn" onclick="addBudgetItem()">＋ 新增工程項目</button>
       <button class="budget-add-btn" style="background:#6c757d;" onclick="addBudgetSource()">＋ 新增預算來源</button>
     </div>
   `;
+}
+
+function toggleBudgetDrawer(idx){
+  const d = document.getElementById('budget-drawer-'+idx);
+  d.classList.toggle('open');
 }
 
 function toggleSourceEdit(si){
@@ -1145,35 +1212,26 @@ function deleteSource(si){
 }
 
 function addBudgetSource(){
-  const name = prompt('預算來源名稱：');
-  if(!name) return;
-  const budgetAmt = parseInt(prompt('預算金額（元）：')||'0')||0;
   const fy = currentBudgetFY;
   const id = 'src_'+Date.now();
-  budget[fy].sources.push({id, name, budget:budgetAmt, spent:0, note:''});
+  budget[fy].sources.push({id, name:'新預算來源', budget:0, spent:0, note:''});
   saveToGitHub();
   renderBudget();
-}
-
-function openBudgetItemEdit(idx){
-  document.getElementById('budget-edit-row-'+idx).style.display='';
-}
-function closeBudgetItemEdit(idx){
-  document.getElementById('budget-edit-row-'+idx).style.display='none';
+  // 展開最後一個來源卡片編輯
+  setTimeout(()=>toggleSourceEdit(budget[fy].sources.length-1), 50);
 }
 
 function saveBudgetItem(idx){
   const fy = currentBudgetFY;
   const item = budget[fy].items[idx];
   item.name = document.getElementById('bei-name-'+idx).value.trim();
-  const srcEl = document.getElementById('bei-src-'+idx);
-  item.source = srcEl.value;
+  item.source = document.getElementById('bei-src-'+idx).value;
   const srcObj = (budget[fy].sources||[]).find(s=>s.id===item.source);
   item.sourceName = srcObj ? srcObj.name : document.getElementById('bei-srcname-'+idx).value.trim();
   item.estimate = parseInt(document.getElementById('bei-est-'+idx).value)||0;
   item.actual = parseInt(document.getElementById('bei-act-'+idx).value)||0;
   item.note = document.getElementById('bei-note-'+idx).value.trim();
-  // 對應卡片（checkboxes）
+  // 對應卡片
   const allCards = [
     ...projects.map(p=>({id:'p_'+p.id, name:p.name})),
     ...repairs.map(r=>({id:'r_'+r.id, name:r.name}))
@@ -1196,9 +1254,8 @@ function addBudgetItem(){
   budget[fy].items.push({id:'item_'+Date.now(), name:'新工程項目', source:'', sourceName:'', estimate:0, actual:0, note:'', linkedProjects:[]});
   saveToGitHub();
   renderBudget();
-  // 自動展開最後一列編輯
   const lastIdx = budget[fy].items.length-1;
-  setTimeout(()=>openBudgetItemEdit(lastIdx), 50);
+  setTimeout(()=>toggleBudgetDrawer(lastIdx), 50);
 }
 
 function jumpToBudgetCard(type, id, tabId){
