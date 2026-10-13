@@ -629,14 +629,15 @@
       "task": "水槽粉色特殊剝落需要補漆",
       "date": "",
       "priority": "mid",
-      "done": false,
+      "done": true,
       "editing": false,
       "logs": [
         {
           "date": "2026-10-13",
           "note": "今天回報已完成"
         }
-      ]
+      ],
+      "pinned": false
     },
     {
       "id": 25,
