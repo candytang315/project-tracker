@@ -577,7 +577,7 @@
       "task": "櫃體發現蟲蛀問題",
       "date": "",
       "priority": "mid",
-      "done": false,
+      "done": true,
       "editing": false,
       "logs": [
         {
@@ -646,6 +646,10 @@
         {
           "date": "2026-07-30",
           "note": "已申請修繕"
+        },
+        {
+          "date": "2026-08-03",
+          "note": "南西修補"
         }
       ],
       "reminders": [
