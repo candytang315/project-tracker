@@ -706,7 +706,12 @@
       "priority": "high",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-10-13",
+          "note": "安排下周去看現場"
+        }
+      ]
     },
     {
       "id": 29,
