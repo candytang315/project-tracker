@@ -666,9 +666,20 @@
           "note": "A11特殊漆修補"
         }
       ]
+    },
+    {
+      "id": 28,
+      "name": "LOC - 嘉義三越電視讀取不到設備",
+      "arrived": "2026-10-13",
+      "task": "已更換新電視盒但電視一樣無法播放\n派員檢查是否線材壞損",
+      "date": "",
+      "priority": "high",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 28,
+  "nextId": 29,
   "budget": {
     "FY26-27": {
       "sources": [
