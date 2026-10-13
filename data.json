@@ -353,8 +353,8 @@
       "task": "製作側立招及更換LOGO吊招",
       "date": "2026-10-16",
       "priority": "high",
-      "done": false,
-      "editing": false,
+      "done": true,
+      "editing": true,
       "logs": [
         {
           "date": "2026-10-13",
