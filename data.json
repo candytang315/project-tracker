@@ -372,7 +372,12 @@
       "done": false,
       "editing": false,
       "reminders": [],
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-10-13",
+          "note": "去申請路權了  下周會再進場\n應該下周五之前可以完成。"
+        }
+      ]
     }
   ],
   "repairs": [
