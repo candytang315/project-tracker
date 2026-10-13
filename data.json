@@ -708,9 +708,10 @@
       "task": "更換舊的馬達避免水垢",
       "date": "2026-10-13",
       "priority": "mid",
-      "done": false,
+      "done": true,
       "editing": false,
-      "logs": []
+      "logs": [],
+      "pinned": false
     }
   ],
   "nextId": 31,
