@@ -459,7 +459,7 @@
       "task": "水槽蓋板刮痕修補",
       "date": "2026-06-30",
       "priority": "mid",
-      "done": false,
+      "done": true,
       "editing": false,
       "logs": [
         {
@@ -474,7 +474,8 @@
           "date": "2026-10-13",
           "note": "今天回報已完成"
         }
-      ]
+      ],
+      "pinned": false
     },
     {
       "id": 13,
@@ -699,9 +700,20 @@
       "editing": false,
       "logs": [],
       "pinned": false
+    },
+    {
+      "id": 30,
+      "name": "LOC - 天母SOGO - 水管馬達更換",
+      "arrived": "2026-09-02",
+      "task": "更換舊的馬達避免水垢",
+      "date": "2026-10-13",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 30,
+  "nextId": 31,
   "budget": {
     "FY26-27": {
       "sources": [
