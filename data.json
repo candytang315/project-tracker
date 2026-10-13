@@ -355,7 +355,12 @@
       "priority": "high",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-10-13",
+          "note": "今天確認廠商圖面"
+        }
+      ]
     },
     {
       "id": 27,
