@@ -686,6 +686,16 @@
           "linkedProjects": [
             "LOC - 忠孝門市調整"
           ]
+        },
+        {
+          "id": "item_1791866667674",
+          "name": "新工程項目",
+          "source": "",
+          "sourceName": "",
+          "estimate": 0,
+          "actual": 0,
+          "note": "",
+          "linkedProjects": []
         }
       ]
     },
