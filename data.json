@@ -340,6 +340,18 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 27,
+      "name": "LOC - 忠孝門市調整",
+      "arrived": "",
+      "task": "配合房東縮減門面寬度",
+      "date": "",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "reminders": [],
+      "logs": []
     }
   ],
   "repairs": [
@@ -609,5 +621,73 @@
       ]
     }
   ],
-  "nextId": 27
+  "nextId": 28,
+  "budget": {
+    "FY26-27": {
+      "sources": [
+        {
+          "id": "repair",
+          "name": "巡櫃修繕",
+          "budget": 350000,
+          "spent": 380000
+        },
+        {
+          "id": "admin",
+          "name": "總務維修費",
+          "budget": 110000,
+          "spent": 30000
+        },
+        {
+          "id": "props",
+          "name": "道具預算",
+          "budget": 240000,
+          "spent": 0,
+          "note": "餘額確認中"
+        }
+      ],
+      "items": [
+        {
+          "id": "aos",
+          "name": "AOS 陳列桌工程",
+          "source": "aos_project",
+          "sourceName": "AOS 130萬專案預算",
+          "estimate": 0,
+          "actual": 0,
+          "note": "報價中",
+          "linkedProjects": [
+            "LOC - 信義A11",
+            "LOC - 南西三越"
+          ]
+        },
+        {
+          "id": "lightbox",
+          "name": "燈箱移除工程",
+          "source": "next_fy",
+          "sourceName": "明年新預算",
+          "estimate": 800000,
+          "actual": 0,
+          "note": "等明年編列",
+          "linkedProjects": [
+            "LOC - 店鋪燈箱移除工程"
+          ]
+        },
+        {
+          "id": "zhongxiao",
+          "name": "忠孝門市調整",
+          "source": "admin",
+          "sourceName": "總務維修費",
+          "estimate": 100000,
+          "actual": 0,
+          "note": "",
+          "linkedProjects": [
+            "LOC - 忠孝門市調整"
+          ]
+        }
+      ]
+    },
+    "FY27-28": {
+      "sources": [],
+      "items": []
+    }
+  }
 }
