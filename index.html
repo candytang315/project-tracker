@@ -267,6 +267,26 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 
 .rem-checkbox { width: 16px; height: 16px; margin-top: 2px; cursor: pointer; flex-shrink: 0; accent-color: #378ADD; }
 .rem-text.rem-done { text-decoration: line-through; color: #bbb; }
+.rem-done-row .rem-text { color: #888; }
+
+/* ── 過往紀錄收合 ── */
+.history-toggle-btn {
+  display: flex; align-items: center; gap: 6px; width: 100%;
+  padding: 7px 14px; background: none; border: none;
+  border-bottom: 1px dashed #e5e5e3;
+  font-size: 12px; color: #378ADD; cursor: pointer; font-family: inherit;
+  text-align: left;
+}
+.history-toggle-btn:hover { background: #E6F1FB; }
+.history-toggle-btn .htoggle-arrow { font-size: 10px; display: inline-block; transition: transform .18s; }
+.history-toggle-btn.open .htoggle-arrow { transform: rotate(180deg); }
+.history-old-panel {
+  display: none; background: #f7f7f5;
+  border-bottom: 1px solid #e5e5e3;
+}
+.history-old-panel.open { display: block; }
+.history-old-panel .rem-row,
+.history-old-panel .log-row { background: #f7f7f5; }
 </style>
 </head>
 <body>
@@ -512,29 +532,8 @@ function cardHtml(p){
       return a.date.localeCompare(b.date);
     });
 
-  const logsHtml=sortedLogs.length
-    ?sortedLogs.map((l)=>{
-    const li=l.originalIndex;
-      if(l.editing){
-        return `
-      <div class="log-row" style="background:#f0f4ff;padding:6px;border-radius:6px;">
-        <input type="date" id="le-date-${p.id}-${li}" value="${l.date}" style="width:120px;flex-shrink:0;" />
-        <textarea id="le-note-${p.id}-${li}" rows="2" style="flex:1;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fff;">${l.note}</textarea>
-        <div style="display:flex;flex-direction:column;gap:2px;">
-          <button class="btn-icon ok" onclick="saveLog('${p._type}',${p.id},${li})" title="儲存" style="padding:2px 4px;font-size:16px;">✓</button>
-          <button class="btn-icon" onclick="cancelLogEdit('${p._type}',${p.id},${li})" title="取消" style="padding:2px 4px;font-size:16px;">✕</button>
-        </div>
-      </div>`;
-      }
-      return `
-      <div class="log-row">
-        <span class="log-date">${fmtDate(l.date)||'—'}</span>
-        <span class="log-text">${l.note}</span>
-        <button class="log-del" onclick="editLog('${p._type}',${p.id},${li})" title="編輯" style="color:#aaa;">✎</button>
-        <button class="log-del" onclick="deleteLog('${p._type}',${p.id},${li})" title="刪除">✕</button>
-      </div>`;
-    }).join('')
-    :`<div style="font-size:13px;color:#bbb;margin-bottom:6px;">尚無進度記錄</div>`;
+  // logsHtml 已移至下方 renderLogRow 函式處理，此處保留空字串佔位
+  const logsHtml='';
 
   const editHtml=p.editing?`
     <div class="card-edit">
@@ -575,7 +574,14 @@ function cardHtml(p){
       return a.date.localeCompare(b.date);
     });
 
-  const remindersHtml=sortedReminders.map((r)=>{
+  // ── 待辦事項：分成「已完成（舊）」和「最新未完成+最近1筆完成」──
+  const doneRems   = sortedReminders.filter(r=>r.done);
+  const activeRems = sortedReminders.filter(r=>!r.done);
+  // 最近1筆已完成顯示在主列（日期最大的）
+  const recentDoneRem = doneRems.length ? [doneRems[doneRems.length-1]] : [];
+  const oldRems       = doneRems.slice(0, doneRems.length - (recentDoneRem.length));
+
+  const renderRemRow = (r) => {
     const ri=r.originalIndex;
     if(r.editing){
       return `
@@ -589,7 +595,7 @@ function cardHtml(p){
       </div>`;
     }
     return `
-      <div class="rem-row">
+      <div class="rem-row${r.done?' rem-done-row':''}">
         <input type="checkbox" class="rem-checkbox" ${r.done?'checked':''} onchange="toggleReminderDone('${p._type}',${p.id},${ri})" />
         <span class="rem-date">${fmtDate(r.date)||'—'}</span>
         <span class="rem-text ${r.done?'rem-done':''}">${r.note}</span>
@@ -597,12 +603,26 @@ function cardHtml(p){
         <button class="rem-icon" onclick="editReminder('${p._type}',${p.id},${ri})" title="編輯">✎</button>
         <button class="rem-icon del" onclick="deleteReminder('${p._type}',${p.id},${ri})" title="刪除">✕</button>
       </div>`;
-  }).join('');
+  };
+
+  const oldRemsHtml = oldRems.map(renderRemRow).join('');
+  const recentDoneRemHtml = recentDoneRem.map(renderRemRow).join('');
+  const activeRemsHtml = activeRems.map(renderRemRow).join('');
+
+  const remToggleBtn = oldRems.length ? `
+    <button class="history-toggle-btn" onclick="toggleHistory('rem-old-${p.id}',this)">
+      <span class="htoggle-arrow">▲</span> 查看過往紀錄（${oldRems.length} 筆已完成）
+    </button>
+    <div class="history-old-panel" id="rem-old-${p.id}">
+      ${oldRemsHtml}
+    </div>` : '';
 
   const remindersSection=p.done?'':`
     <div class="reminders-area">
       <div class="reminders-label">待辦事項</div>
-      ${remindersHtml}
+      ${remToggleBtn}
+      ${recentDoneRemHtml}
+      ${activeRemsHtml}
       <div class="add-rem">
         <input type="date" id="rmd-${p.id}" value="${todayStr()}" />
         <input type="text" id="rmn-${p.id}" placeholder="輸入待辦內容…" />
@@ -610,10 +630,51 @@ function cardHtml(p){
       </div>
     </div>`;
 
+  // ── 進度記錄：最近3筆顯示，其餘收合 ──
+  const LOGS_SHOW = 3;
+  const recentLogs = sortedLogs.slice(-LOGS_SHOW);
+  const oldLogs    = sortedLogs.slice(0, sortedLogs.length - recentLogs.length);
+
+  const renderLogRow = (l) => {
+    const li=l.originalIndex;
+    if(l.editing){
+      return `
+      <div class="log-row" style="background:#f0f4ff;padding:6px;border-radius:6px;">
+        <input type="date" id="le-date-${p.id}-${li}" value="${l.date}" style="width:120px;flex-shrink:0;" />
+        <textarea id="le-note-${p.id}-${li}" rows="2" style="flex:1;font-family:inherit;line-height:1.5;font-size:14px;padding:5px 9px;border-radius:6px;border:1px solid #ddd;background:#fff;">${l.note}</textarea>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <button class="btn-icon ok" onclick="saveLog('${p._type}',${p.id},${li})" title="儲存" style="padding:2px 4px;font-size:16px;">✓</button>
+          <button class="btn-icon" onclick="cancelLogEdit('${p._type}',${p.id},${li})" title="取消" style="padding:2px 4px;font-size:16px;">✕</button>
+        </div>
+      </div>`;
+    }
+    return `
+      <div class="log-row">
+        <span class="log-date">${fmtDate(l.date)||'—'}</span>
+        <span class="log-text">${l.note}</span>
+        <button class="log-del" onclick="editLog('${p._type}',${p.id},${li})" title="編輯" style="color:#aaa;">✎</button>
+        <button class="log-del" onclick="deleteLog('${p._type}',${p.id},${li})" title="刪除">✕</button>
+      </div>`;
+  };
+
+  const recentLogsHtml = recentLogs.length
+    ? recentLogs.map(renderLogRow).join('')
+    : `<div style="font-size:13px;color:#bbb;margin-bottom:6px;">尚無進度記錄</div>`;
+  const oldLogsHtml = oldLogs.map(renderLogRow).join('');
+
+  const logToggleBtn = oldLogs.length ? `
+    <button class="history-toggle-btn" onclick="toggleHistory('log-old-${p.id}',this)">
+      <span class="htoggle-arrow">▲</span> 查看更早紀錄（${oldLogs.length} 筆）
+    </button>
+    <div class="history-old-panel" id="log-old-${p.id}">
+      ${oldLogsHtml}
+    </div>` : '';
+
   const logsSection=p.done?'':`
     <div class="logs-area">
       <div class="logs-label">進度記錄</div>
-      ${logsHtml}
+      ${logToggleBtn}
+      ${recentLogsHtml}
       <div class="add-log">
         <div class="add-log-row"><input type="date" id="ld-${p.id}" value="${todayStr()}" /></div>
         <div class="add-log-row">
@@ -1256,6 +1317,14 @@ function addBudgetItem(){
   renderBudget();
   const lastIdx = budget[fy].items.length-1;
   setTimeout(()=>toggleBudgetDrawer(lastIdx), 50);
+}
+
+function toggleHistory(panelId, btn){
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.querySelector('.htoggle-arrow').textContent = isOpen ? '▼' : '▲';
 }
 
 function jumpToBudgetCard(type, id, tabId){
