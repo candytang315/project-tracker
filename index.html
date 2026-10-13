@@ -147,6 +147,22 @@ select, input[type="text"], input[type="date"] { font-size: 14px; padding: 5px 9
 .budget-empty { padding:32px; text-align:center; color:#bbb; font-size:14px; }
 .budget-add-btn { margin-top:14px; padding:7px 18px; background:#378ADD; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer; }
 .budget-add-btn:hover { background:#185FA5; }
+.budget-edit-row td { background:#f0f7ff; }
+.budget-edit-row input, .budget-edit-row select { font-size:13px; padding:4px 8px; border:1px solid #c5d8ef; border-radius:5px; width:100%; background:#fff; }
+.budget-edit-row textarea { font-size:13px; padding:4px 8px; border:1px solid #c5d8ef; border-radius:5px; width:100%; background:#fff; resize:vertical; }
+.budget-row-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.budget-row-actions button { font-size:12px; padding:3px 10px; border-radius:5px; border:none; cursor:pointer; }
+.btn-edit-row { background:#E6F1FB; color:#185FA5; }
+.btn-save-row { background:#E1F5EE; color:#0F6E56; }
+.btn-del-row  { background:#FCEBEB; color:#A32D2D; }
+.source-edit-wrap { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+.source-edit-wrap input { font-size:12px; padding:3px 8px; border:1px solid #c5d8ef; border-radius:5px; flex:1; min-width:60px; background:#fff; }
+.source-edit-wrap label { font-size:11px; color:#999; }
+.budget-action-bar { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.budget-source-card { background:#f7f7f5; border-radius:10px; padding:14px 16px; cursor:pointer; position:relative; }
+.budget-source-card:hover .source-edit-toggle { opacity:1; }
+.source-edit-toggle { position:absolute; top:8px; right:8px; font-size:11px; color:#378ADD; opacity:0; background:#E6F1FB; border:none; border-radius:4px; padding:2px 7px; cursor:pointer; }
+.source-card-editing { background:#e8f4ff; }
 .nav-sub-wrap.open { display: block; }
 .nav-item .nav-chevron { font-size: 16px; color: #bbb; transition: transform 0.15s; margin-left: 4px; cursor: pointer; padding: 0 4px; display: inline-block; }
 .nav-item.open .nav-chevron { transform: rotate(90deg); }
@@ -985,7 +1001,8 @@ function renderBudget(){
   const el = document.getElementById('budget-content');
   if(!el) return;
   const fy = currentBudgetFY;
-  const fyData = (budget && budget[fy]) || {sources:[], items:[]};
+  if(!budget[fy]) budget[fy]={sources:[],items:[]};
+  const fyData = budget[fy];
   const sources = fyData.sources || [];
   const items = fyData.items || [];
 
@@ -994,67 +1011,194 @@ function renderBudget(){
     `<button class="budget-fy-btn${f===fy?' active':''}" onclick="switchBudgetFY('${f}')">${f}</button>`
   ).join('');
 
+  // 所有可選卡片（用於下拉）
+  const allCards = [
+    ...projects.map(p=>({id:'p_'+p.id, name:p.name, type:'project', tabId:'tab-project', pid:p.id})),
+    ...repairs.map(r=>({id:'r_'+r.id, name:r.name, type:'repair', tabId:'tab-repair', pid:r.id}))
+  ];
+
   // 預算來源卡片
   let sourcesHtml = '';
   if(sources.length){
-    sourcesHtml = `<div class="budget-sources">` + sources.map(s=>{
+    sourcesHtml = `<div class="budget-sources">` + sources.map((s,si)=>{
       const diff = s.spent - s.budget;
       let subHtml = '';
       if(s.note){ subHtml=`<div class="budget-source-sub muted">${s.note}</div>`; }
       else if(diff>0){ subHtml=`<div class="budget-source-sub over">已用 ${(s.spent/10000).toFixed(0)}萬　超支 ${(diff/10000).toFixed(0)}萬</div>`; }
       else if(s.spent>0){ const rem=s.budget-s.spent; subHtml=`<div class="budget-source-sub warn">已用 ${(s.spent/10000).toFixed(0)}萬　剩餘 ${(rem/10000).toFixed(0)}萬</div>`; }
       else { subHtml=`<div class="budget-source-sub ok">尚未使用</div>`; }
-      return `<div class="budget-source-card">
+      return `<div class="budget-source-card" id="src-card-${si}">
+        <button class="source-edit-toggle" onclick="toggleSourceEdit(${si})">編輯</button>
         <div class="budget-source-label">${s.name}</div>
         <div class="budget-source-amount">${(s.budget/10000).toFixed(0)}萬</div>
         ${subHtml}
+        <div id="src-edit-${si}" style="display:none;">
+          <div class="source-edit-wrap">
+            <label>名稱</label><input id="src-name-${si}" value="${s.name}">
+            <label>預算(元)</label><input id="src-budget-${si}" type="number" value="${s.budget}">
+            <label>已用(元)</label><input id="src-spent-${si}" type="number" value="${s.spent}">
+            <label>備註</label><input id="src-note-${si}" value="${s.note||''}">
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px;">
+            <button class="budget-row-actions btn-save-row" onclick="saveSource(${si})">儲存</button>
+            <button class="budget-row-actions btn-del-row" onclick="deleteSource(${si})">刪除</button>
+          </div>
+        </div>
       </div>`;
     }).join('') + `</div>`;
   }
 
-  // 明細表格
+  // 明細表格（可編輯）
   let tableHtml = '';
-  if(items.length){
-    const rows = items.map(item=>{
-      // 找對應的卡片 ids
-      const linkedNames = item.linkedProjects || [];
-      const linkedCards = [...projects, ...repairs].filter(p=>linkedNames.includes(p.name));
-      const linkBtns = linkedCards.map(p=>{
-        const type = projects.includes(p) ? 'project' : 'repair';
-        const tabId = type==='project' ? 'tab-project' : 'tab-repair';
-        return `<button class="budget-link-btn" onclick="jumpToBudgetCard('${type}',${p.id},'${tabId}')">${p.name}</button>`;
-      }).join(' ');
-      const noLink = linkedNames.length && !linkedCards.length ? `<span style="color:#ccc;font-size:12px;">（卡片未建立）</span>` : '';
+  const cardOptions = allCards.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
 
-      const estText = item.estimate ? (item.estimate/10000).toFixed(0)+'萬' : '—';
-      const actText = item.actual ? (item.actual/10000).toFixed(0)+'萬' : '—';
-      const noteText = item.note || '';
-      return `<tr>
-        <td style="font-weight:500;">${item.name}${noteText?`<br><span style="font-size:11px;color:#bbb;">${noteText}</span>`:''}</td>
-        <td style="color:#666;">${item.sourceName||item.source}</td>
-        <td>${estText}</td>
-        <td>${actText}</td>
-        <td>${linkBtns}${noLink}</td>
-      </tr>`;
-    }).join('');
-    tableHtml = `<div class="budget-table-wrap">
-      <table class="budget-table">
-        <thead><tr>
-          <th>工程項目</th><th>預算來源</th><th>預估金額</th><th>實際花費</th><th>對應卡片</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
-  } else {
-    tableHtml = `<div class="budget-table-wrap"><div class="budget-empty">尚無預算明細</div></div>`;
-  }
+  const makeRow = (item, idx) => {
+    const linkedNames = item.linkedProjects || [];
+    const linkedCards = allCards.filter(c=>linkedNames.includes(c.name));
+    const linkBtns = linkedCards.map(c=>
+      `<button class="budget-link-btn" onclick="jumpToBudgetCard('${c.type}',${c.pid},'${c.tabId}')">${c.name}</button>`
+    ).join(' ');
+    const noLink = linkedNames.length && !linkedCards.length ? `<span style="color:#ccc;font-size:12px;">（卡片未建立）</span>` : '';
+    const estText = item.estimate ? (item.estimate/10000).toFixed(0)+'萬' : '—';
+    const actText = item.actual ? (item.actual/10000).toFixed(0)+'萬' : '—';
+    const noteText = item.note || '';
+    // 來源選項
+    const srcOpts = sources.map(s=>`<option value="${s.id}" ${s.id===item.source?'selected':''}>${s.name}</option>`).join('');
+    const otherOpts = `<option value="aos_project" ${item.source==='aos_project'?'selected':''}>AOS 130萬專案預算</option><option value="next_fy" ${item.source==='next_fy'?'selected':''}>明年新預算</option><option value="other">其他</option>`;
+    // 已選卡片（multi）
+    const selectedCardIds = allCards.filter(c=>linkedNames.includes(c.name)).map(c=>c.id);
+    return `<tr id="budget-row-${idx}">
+      <td style="font-weight:500;">${item.name}${noteText?`<br><span style="font-size:11px;color:#bbb;">${noteText}</span>`:''}</td>
+      <td style="color:#666;">${item.sourceName||item.source}</td>
+      <td>${estText}</td><td>${actText}</td>
+      <td>${linkBtns}${noLink}</td>
+      <td><div class="budget-row-actions"><button class="btn-edit-row" onclick="openBudgetItemEdit(${idx})">編輯</button><button class="btn-del-row" onclick="deleteBudgetItem(${idx})">刪除</button></div></td>
+    </tr>
+    <tr id="budget-edit-row-${idx}" class="budget-edit-row" style="display:none;">
+      <td><input id="bei-name-${idx}" value="${item.name}" placeholder="工程項目名稱"></td>
+      <td><select id="bei-src-${idx}">${srcOpts}${otherOpts}</select>
+          <input id="bei-srcname-${idx}" value="${item.sourceName||''}" placeholder="自訂來源名稱（選其他時填）" style="margin-top:4px;"></td>
+      <td><input id="bei-est-${idx}" type="number" value="${item.estimate||0}" placeholder="預估金額(元)"></td>
+      <td><input id="bei-act-${idx}" type="number" value="${item.actual||0}" placeholder="實際花費(元)"></td>
+      <td>
+        <div style="font-size:11px;color:#999;margin-bottom:4px;">選擇對應卡片（可複選）：</div>
+        <div id="bei-cards-${idx}" style="max-height:120px;overflow-y:auto;border:1px solid #ddd;border-radius:5px;padding:4px;background:#fff;">
+          ${allCards.map(c=>`<label style="display:block;font-size:12px;padding:2px 4px;cursor:pointer;"><input type="checkbox" value="${c.id}" ${selectedCardIds.includes(c.id)?'checked':''}> ${c.name}</label>`).join('')}
+        </div>
+      </td>
+      <td>
+        <input id="bei-note-${idx}" value="${item.note||''}" placeholder="備註" style="margin-bottom:6px;">
+        <div class="budget-row-actions">
+          <button class="btn-save-row" onclick="saveBudgetItem(${idx})">儲存</button>
+          <button class="btn-edit-row" onclick="closeBudgetItemEdit(${idx})">取消</button>
+        </div>
+      </td>
+    </tr>`;
+  };
+
+  const rows = items.map((item,idx)=>makeRow(item,idx)).join('');
+  tableHtml = `<div class="budget-table-wrap">
+    <table class="budget-table">
+      <thead><tr>
+        <th>工程項目</th><th>預算來源</th><th>預估金額</th><th>實際花費</th><th>對應卡片</th><th></th>
+      </tr></thead>
+      <tbody id="budget-tbody">${rows}</tbody>
+    </table>
+  </div>`;
 
   el.innerHTML = `
     <div class="sec-title">年度預算</div>
     <div class="budget-fy-bar">${fyBtns}</div>
     ${sourcesHtml || `<div style="color:#bbb;font-size:13px;margin-bottom:16px;">尚未設定預算來源</div>`}
     ${tableHtml}
+    <div class="budget-action-bar">
+      <button class="budget-add-btn" onclick="addBudgetItem()">＋ 新增工程項目</button>
+      <button class="budget-add-btn" style="background:#6c757d;" onclick="addBudgetSource()">＋ 新增預算來源</button>
+    </div>
   `;
+}
+
+function toggleSourceEdit(si){
+  const el = document.getElementById('src-edit-'+si);
+  const card = document.getElementById('src-card-'+si);
+  const show = el.style.display==='none';
+  el.style.display = show?'block':'none';
+  card.classList.toggle('source-card-editing', show);
+}
+
+function saveSource(si){
+  const fy = currentBudgetFY;
+  const s = budget[fy].sources[si];
+  s.name = document.getElementById('src-name-'+si).value.trim();
+  s.budget = parseInt(document.getElementById('src-budget-'+si).value)||0;
+  s.spent = parseInt(document.getElementById('src-spent-'+si).value)||0;
+  s.note = document.getElementById('src-note-'+si).value.trim();
+  saveToGitHub();
+  renderBudget();
+}
+
+function deleteSource(si){
+  if(!confirm('確定刪除此預算來源？')) return;
+  budget[currentBudgetFY].sources.splice(si,1);
+  saveToGitHub();
+  renderBudget();
+}
+
+function addBudgetSource(){
+  const name = prompt('預算來源名稱：');
+  if(!name) return;
+  const budgetAmt = parseInt(prompt('預算金額（元）：')||'0')||0;
+  const fy = currentBudgetFY;
+  const id = 'src_'+Date.now();
+  budget[fy].sources.push({id, name, budget:budgetAmt, spent:0, note:''});
+  saveToGitHub();
+  renderBudget();
+}
+
+function openBudgetItemEdit(idx){
+  document.getElementById('budget-edit-row-'+idx).style.display='';
+}
+function closeBudgetItemEdit(idx){
+  document.getElementById('budget-edit-row-'+idx).style.display='none';
+}
+
+function saveBudgetItem(idx){
+  const fy = currentBudgetFY;
+  const item = budget[fy].items[idx];
+  item.name = document.getElementById('bei-name-'+idx).value.trim();
+  const srcEl = document.getElementById('bei-src-'+idx);
+  item.source = srcEl.value;
+  const srcObj = (budget[fy].sources||[]).find(s=>s.id===item.source);
+  item.sourceName = srcObj ? srcObj.name : document.getElementById('bei-srcname-'+idx).value.trim();
+  item.estimate = parseInt(document.getElementById('bei-est-'+idx).value)||0;
+  item.actual = parseInt(document.getElementById('bei-act-'+idx).value)||0;
+  item.note = document.getElementById('bei-note-'+idx).value.trim();
+  // 對應卡片（checkboxes）
+  const allCards = [
+    ...projects.map(p=>({id:'p_'+p.id, name:p.name})),
+    ...repairs.map(r=>({id:'r_'+r.id, name:r.name}))
+  ];
+  const checked = Array.from(document.querySelectorAll(`#bei-cards-${idx} input[type=checkbox]:checked`)).map(cb=>cb.value);
+  item.linkedProjects = allCards.filter(c=>checked.includes(c.id)).map(c=>c.name);
+  saveToGitHub();
+  renderBudget();
+}
+
+function deleteBudgetItem(idx){
+  if(!confirm('確定刪除此工程項目？')) return;
+  budget[currentBudgetFY].items.splice(idx,1);
+  saveToGitHub();
+  renderBudget();
+}
+
+function addBudgetItem(){
+  const fy = currentBudgetFY;
+  budget[fy].items.push({id:'item_'+Date.now(), name:'新工程項目', source:'', sourceName:'', estimate:0, actual:0, note:'', linkedProjects:[]});
+  saveToGitHub();
+  renderBudget();
+  // 自動展開最後一列編輯
+  const lastIdx = budget[fy].items.length-1;
+  setTimeout(()=>openBudgetItemEdit(lastIdx), 50);
 }
 
 function jumpToBudgetCard(type, id, tabId){
