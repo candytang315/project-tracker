@@ -354,7 +354,7 @@
       "date": "2026-10-16",
       "priority": "high",
       "done": true,
-      "editing": true,
+      "editing": false,
       "logs": [
         {
           "date": "2026-10-13",
@@ -677,9 +677,20 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 29,
+      "name": "LOC - 台南西門拆角鋼架",
+      "arrived": "2026-09-01",
+      "task": "拆除局部角鋼架",
+      "date": "2026-09-04",
+      "priority": "mid",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
-  "nextId": 29,
+  "nextId": 30,
   "budget": {
     "FY26-27": {
       "sources": [
