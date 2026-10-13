@@ -631,7 +631,12 @@
       "priority": "mid",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-10-13",
+          "note": "今天回報已完成"
+        }
+      ]
     },
     {
       "id": 25,
@@ -685,9 +690,10 @@
       "task": "拆除局部角鋼架",
       "date": "2026-09-04",
       "priority": "mid",
-      "done": false,
+      "done": true,
       "editing": false,
-      "logs": []
+      "logs": [],
+      "pinned": false
     }
   ],
   "nextId": 30,
