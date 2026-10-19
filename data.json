@@ -419,7 +419,12 @@
       "priority": "high",
       "done": false,
       "editing": false,
-      "logs": []
+      "logs": [
+        {
+          "date": "2026-10-16",
+          "note": "因為想利用台南中山撤櫃的水槽桌\n會先將水槽桌保留至高雄工廠"
+        }
+      ]
     }
   ],
   "repairs": [
