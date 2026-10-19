@@ -398,6 +398,17 @@
           "editing": false
         }
       ]
+    },
+    {
+      "id": 32,
+      "name": "LOC - 忠孝門市 - 輕改裝提案",
+      "arrived": "2026-10-14",
+      "task": "針對現有狀況思考如何調整店內裝潢\n在預算控制的狀況下將完成店裝調整提案",
+      "date": "2026-11-30",
+      "priority": "high",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
   "repairs": [
@@ -739,7 +750,7 @@
       "pinned": false
     }
   ],
-  "nextId": 32,
+  "nextId": 33,
   "budget": {
     "FY26-27": {
       "sources": [
