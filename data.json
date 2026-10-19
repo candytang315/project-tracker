@@ -409,6 +409,17 @@
       "done": false,
       "editing": false,
       "logs": []
+    },
+    {
+      "id": 33,
+      "name": "LOC - 高雄統時 - 輕改裝提案",
+      "arrived": "2026-10-14",
+      "task": "專案說明：針對現有狀況思考如何調整店內裝潢\n在預算控制的狀況下將完成店裝調整提案",
+      "date": "2026-11-30",
+      "priority": "high",
+      "done": false,
+      "editing": false,
+      "logs": []
     }
   ],
   "repairs": [
@@ -750,7 +761,7 @@
       "pinned": false
     }
   ],
-  "nextId": 33,
+  "nextId": 34,
   "budget": {
     "FY26-27": {
       "sources": [
