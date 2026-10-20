@@ -799,8 +799,8 @@
           "id": "aos",
           "name": "AOS 陳列桌工程",
           "source": "aos_project",
-          "sourceName": "AOS 130萬專案預算",
-          "estimate": 0,
+          "sourceName": "AOS專案預算",
+          "estimate": 1300000,
           "actual": 0,
           "note": "報價中",
           "linkedProjects": [
