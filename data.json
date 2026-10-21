@@ -124,7 +124,7 @@
       "task": "接手品木舊櫃改裝",
       "date": "2026-08-06",
       "priority": "high",
-      "done": false,
+      "done": true,
       "editing": false,
       "logs": [
         {
@@ -271,7 +271,8 @@
           "note": "Evan回覆LOGO投射燈問題暫不處理了,國外知道投影效果很差",
           "done": true
         }
-      ]
+      ],
+      "pinned": false
     },
     {
       "id": 14,
